@@ -95,28 +95,77 @@ body {
 }
 
 /* ─── Phosphor Flicker ───────────────────────────────────────── */
+/* Irregular opacity dips simulate phosphor instability.          */
+/* NOTE: filter/transform must NOT be used here — either property */
+/* creates a new CSS containing block and breaks position:fixed   */
+/* on the canvas, nav, footer, scanlines, and vignette overlays.  */
 @keyframes flicker {
   0%,
-  89%,
-  91%,
-  93%,
-  95%,
   100% {
     opacity: 1;
   }
-  90% {
-    opacity: 0.97;
+  /* micro-dip cluster around 18% */
+  17.5% {
+    opacity: 0.98;
   }
-  92% {
-    opacity: 0.99;
+  18% {
+    opacity: 0.88;
   }
-  94% {
+  18.5% {
+    opacity: 1;
+  }
+  19% {
+    opacity: 0.94;
+  }
+  19.5% {
+    opacity: 1;
+  }
+  /* single sharp dip at 47% */
+  47% {
+    opacity: 0.9;
+  }
+  47.3% {
+    opacity: 1;
+  }
+  /* double flick at 73% */
+  72.8% {
     opacity: 0.96;
+  }
+  73% {
+    opacity: 0.82;
+  }
+  73.3% {
+    opacity: 1;
+  }
+  73.7% {
+    opacity: 0.93;
+  }
+  74% {
+    opacity: 1;
   }
 }
 
 .crt-flicker {
-  animation: flicker 9s infinite;
+  animation: flicker 11s ease-in-out infinite;
+}
+
+/* ─── Phosphor glow pulse ────────────────────────────────────── */
+/* Heading glow breathes so the screen appears to be lit from     */
+/* within — synced to a slightly different period than the flicker */
+/* so they occasionally reinforce each other.                     */
+@keyframes glow-pulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 8px var(--phosphor),
+      0 0 24px rgba(232, 160, 32, 0.35);
+  }
+  50% {
+    text-shadow:
+      0 0 14px var(--phosphor),
+      0 0 40px rgba(232, 160, 32, 0.55),
+      0 0 80px rgba(232, 160, 32, 0.15);
+  }
 }
 
 /* ─── Blink ──────────────────────────────────────────────────── */
@@ -162,9 +211,7 @@ label {
 }
 
 .glow-text {
-  text-shadow:
-    0 0 8px var(--phosphor),
-    0 0 24px rgba(232, 160, 32, 0.35);
+  animation: glow-pulse 5s ease-in-out infinite;
 }
 
 /* ─── Prompt prefix ──────────────────────────────────────────── */
