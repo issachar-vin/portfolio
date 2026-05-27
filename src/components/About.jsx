@@ -1,17 +1,89 @@
 import { useRef } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { lineContainer, lineItem, headingReveal, fadeUp, instant } from '../animations/variants'
+import { fadeUp, instant } from '../animations/variants'
+import { useTypewriter } from '../hooks/useTypewriter'
 import { ABOUT } from '../data/copy'
 import TerminalWindow from './TerminalWindow'
+
+const S_LABEL = 20
+const S_HEADING = 35
+const S_BODY = 3
+const S_FACT = 12
+
+function BioLine({ line, isInView, delay }) {
+  const text = useTypewriter(line, isInView, { speed: S_BODY, delay })
+  return (
+    <p
+      style={{
+        fontFamily: 'var(--font-body)',
+        color: 'var(--phosphor-dim)',
+        fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
+        lineHeight: 1.75,
+        position: 'relative',
+      }}
+    >
+      <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+        {line}
+      </span>
+      <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{text}</span>
+    </p>
+  )
+}
+
+function FactItem({ label, value, isInView, delay }) {
+  const displayedValue = useTypewriter(value, isInView, { speed: S_FACT, delay })
+  return (
+    <div style={{ display: 'contents' }}>
+      <dt
+        style={{
+          fontFamily: 'var(--font-body)',
+          color: 'var(--phosphor-dim)',
+          fontSize: '0.75rem',
+          letterSpacing: '0.15em',
+          paddingTop: '0.1em',
+        }}
+      >
+        {label}
+      </dt>
+      <dd
+        style={{
+          fontFamily: 'var(--font-body)',
+          color: 'var(--phosphor)',
+          fontSize: '0.85rem',
+          borderLeft: '1px solid var(--border)',
+          paddingLeft: '1rem',
+          position: 'relative',
+        }}
+      >
+        <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+          {value}
+        </span>
+        <span style={{ position: 'absolute', top: 0, left: '1rem', right: 0 }}>{displayedValue}</span>
+      </dd>
+    </div>
+  )
+}
 
 export default function About() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: false, margin: '-15%' })
   const prefersReduced = useReducedMotion()
-
-  const lineV = prefersReduced ? instant : lineContainer
-  const headV = prefersReduced ? instant : headingReveal
   const upV = prefersReduced ? instant : fadeUp
+
+  // Sequential chain: each item starts when the previous finishes
+  let cur = 0
+  const labelDelay = cur; cur += ABOUT.sectionLabel.length * S_LABEL
+  const headingDelay = cur; cur += ABOUT.heading.length * S_HEADING
+  const bioLineDelays = ABOUT.bio.map((line) => {
+    if (line === '') return null
+    const d = cur; cur += line.length * S_BODY; return d
+  })
+  const factValueDelays = ABOUT.facts.map(({ value }) => {
+    const d = cur; cur += value.length * S_FACT; return d
+  })
+
+  const sectionLabel = useTypewriter(ABOUT.sectionLabel, isInView, { speed: S_LABEL, delay: labelDelay })
+  const heading = useTypewriter(ABOUT.heading, isInView, { speed: S_HEADING, delay: headingDelay })
 
   return (
     <section
@@ -32,67 +104,42 @@ export default function About() {
       >
         {/* ── Left: text ── */}
         <div>
-          {/* Section label */}
-          <motion.p
-            variants={upV}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
+          <p
             style={{
               fontFamily: 'var(--font-body)',
               color: 'var(--phosphor-dim)',
               fontSize: '0.75rem',
               letterSpacing: '0.2em',
               marginBottom: '0.75rem',
+              position: 'relative',
             }}
           >
-            {ABOUT.sectionLabel}
-          </motion.p>
+            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+              {ABOUT.sectionLabel}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabel}</span>
+          </p>
 
-          {/* Heading */}
-          <motion.h2
+          <h2
             id="about-heading"
             className="glow-text prompt"
-            variants={headV}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            style={{ marginBottom: '2rem' }}
+            aria-label={ABOUT.heading}
+            style={{ marginBottom: '2rem', position: 'relative' }}
           >
-            {ABOUT.heading}
-          </motion.h2>
+            <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
+              {ABOUT.heading}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{heading}</span>
+          </h2>
 
-          {/* Bio */}
-          <motion.div
-            variants={lineV}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            role="region"
-            aria-label="Biography"
-          >
-            {ABOUT.bio.map((line, i) =>
-              line === '' ? (
-                <div key={i} style={{ height: '1rem' }} aria-hidden="true" />
-              ) : (
-                <motion.p
-                  key={i}
-                  variants={lineItem}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    color: 'var(--phosphor-dim)',
-                    fontSize: 'clamp(0.85rem, 1.5vw, 0.95rem)',
-                    lineHeight: 1.75,
-                  }}
-                >
-                  {line}
-                </motion.p>
-              )
-            )}
-          </motion.div>
+          <div role="region" aria-label="Biography">
+            {ABOUT.bio.map((line, i) => {
+              if (line === '') return <div key={i} style={{ height: '1rem' }} aria-hidden="true" />
+              return <BioLine key={i} line={line} isInView={isInView} delay={bioLineDelays[i]} />
+            })}
+          </div>
 
-          {/* Loaded modules list */}
-          <motion.dl
-            variants={lineV}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
+          <dl
             style={{
               marginTop: '2.5rem',
               display: 'grid',
@@ -102,33 +149,16 @@ export default function About() {
             }}
             aria-label="Quick facts"
           >
-            {ABOUT.facts.map(({ label, value }) => (
-              <motion.div key={label} variants={lineItem} style={{ display: 'contents' }}>
-                <dt
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    color: 'var(--phosphor-dim)',
-                    fontSize: '0.75rem',
-                    letterSpacing: '0.15em',
-                    paddingTop: '0.1em',
-                  }}
-                >
-                  {label}
-                </dt>
-                <dd
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    color: 'var(--phosphor)',
-                    fontSize: '0.85rem',
-                    borderLeft: '1px solid var(--border)',
-                    paddingLeft: '1rem',
-                  }}
-                >
-                  {value}
-                </dd>
-              </motion.div>
+            {ABOUT.facts.map(({ label, value }, i) => (
+              <FactItem
+                key={label}
+                label={label}
+                value={value}
+                isInView={isInView}
+                delay={factValueDelays[i]}
+              />
             ))}
-          </motion.dl>
+          </dl>
         </div>
 
         {/* ── Right: animated terminal ── */}

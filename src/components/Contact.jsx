@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { headingReveal, fadeUp, lineContainer, lineItem, instant } from '../animations/variants'
+import { lineContainer, lineItem, instant } from '../animations/variants'
+import { useTypewriter } from '../hooks/useTypewriter'
 import { CONTACT, SITE, SOCIAL } from '../data/copy'
 
 const linkedinHref = SOCIAL.find((s) => s.label === 'LinkedIn')?.href
@@ -162,9 +163,17 @@ export default function Contact() {
   const [fields, setFields] = useState({ name: '', message: '' })
   const [showWip, setShowWip] = useState(false)
 
-  const headV = prefersReduced ? instant : headingReveal
-  const upV = prefersReduced ? instant : fadeUp
   const lineV = prefersReduced ? instant : lineContainer
+
+  // Sequential chain
+  let cur = 0
+  const labelDelay = cur; cur += CONTACT.sectionLabel.length * 20
+  const headingDelay = cur; cur += CONTACT.heading.length * 35
+  const promptDelay = cur
+
+  const sectionLabelText = useTypewriter(CONTACT.sectionLabel, isInView, { speed: 20, delay: labelDelay })
+  const headingText = useTypewriter(CONTACT.heading, isInView, { speed: 35, delay: headingDelay })
+  const promptText = useTypewriter(CONTACT.prompt, isInView, { speed: 20, delay: promptDelay })
 
   const onChange = (e) => setFields((f) => ({ ...f, [e.target.name]: e.target.value }))
   const onSubmit = (e) => {
@@ -184,48 +193,51 @@ export default function Contact() {
       >
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {/* Section label */}
-          <motion.p
-            variants={upV}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
+          <p
             style={{
               fontFamily: 'var(--font-body)',
               color: 'var(--phosphor-dim)',
               fontSize: '0.75rem',
               letterSpacing: '0.2em',
               marginBottom: '0.75rem',
+              position: 'relative',
             }}
           >
-            {CONTACT.sectionLabel}
-          </motion.p>
+            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+              {CONTACT.sectionLabel}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
+          </p>
 
           {/* Heading */}
-          <motion.h2
+          <h2
             id="contact-heading"
             className="glow-text prompt"
-            variants={headV}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
-            style={{ marginBottom: '0.75rem' }}
+            aria-label={CONTACT.heading}
+            style={{ marginBottom: '0.75rem', position: 'relative' }}
           >
-            {CONTACT.heading}
-          </motion.h2>
+            <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
+              {CONTACT.heading}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
+          </h2>
 
           {/* Prompt line */}
-          <motion.p
-            variants={upV}
-            initial="hidden"
-            animate={isInView ? 'visible' : 'hidden'}
+          <p
             style={{
               fontFamily: 'var(--font-body)',
               color: 'var(--phosphor-dim)',
               fontSize: '0.85rem',
               letterSpacing: '0.1em',
               marginBottom: '2.5rem',
+              position: 'relative',
             }}
           >
-            {CONTACT.prompt}
-          </motion.p>
+            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+              {CONTACT.prompt}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{promptText}</span>
+          </p>
 
           {/* Form */}
           <motion.form
