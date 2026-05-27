@@ -179,6 +179,73 @@ label {
   background: var(--phosphor-dim);
 }
 
+/* ─── Terminal inputs (Contact form) ────────────────────────── */
+.terminal-input {
+  font-family: var(--font-body);
+  color: var(--phosphor);
+  background: var(--surface);
+  border: 1px solid var(--phosphor-dim);
+  padding: 0.6em 0.85em;
+  font-size: 0.85rem;
+  width: 100%;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  resize: vertical;
+}
+
+.terminal-input:focus {
+  border-color: var(--phosphor);
+  box-shadow: 0 0 14px var(--glow);
+}
+
+.terminal-input::placeholder {
+  color: var(--phosphor-faint);
+}
+
+.terminal-btn {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.12em;
+  color: var(--phosphor);
+  background: transparent;
+  border: 1px solid var(--phosphor);
+  padding: 0.35em 1.6em;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+
+.terminal-btn:hover:not(:disabled) {
+  background: var(--phosphor);
+  color: var(--bg);
+  box-shadow: 0 0 24px var(--glow-strong);
+}
+
+.terminal-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ─── Skill ticker ───────────────────────────────────────────── */
+/* Inner track contains 3 copies of items; -33.333% = one copy.  */
+@keyframes ticker-fwd {
+  to {
+    transform: translateX(-33.333%);
+  }
+}
+@keyframes ticker-rev {
+  from {
+    transform: translateX(-33.333%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 /* ─── Reduced motion ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
