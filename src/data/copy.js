@@ -20,7 +20,8 @@ export const SOCIAL = [
 
 export const NAV = [
   { label: 'ABOUT', href: '#about' },
-  { label: 'WORK', href: '#work' },
+  { label: 'EXPERIENCE', href: '#experience' },
+  { label: 'PROJECTS', href: '#work' },
   { label: 'SKILLS', href: '#skills' },
   { label: 'CONTACT', href: '#contact' },
 ]
@@ -75,10 +76,58 @@ export const ABOUT = {
   photoCaption: 'ISSACHAR VINAJERAS — MIAMI, FL',
 }
 
+/* ─── Experience ─────────────────────────────────────────────── */
+export const EXPERIENCE = {
+  sectionLabel: '02 / EXPERIENCE',
+  heading: 'EXPERIENCE',
+  roles: [
+    {
+      id: 'nomad-health-senior',
+      company: 'Nomad Health',
+      title: 'Senior Software Engineer',
+      period: 'May 2025 – May 2026',
+      bullets: [
+        'Architected Scout, an internal recruiting tool used by 20+ recruiters — evolved from a Zendesk-based system into a Twilio-integrated platform with in-browser messaging, voice calls with transcripts, and Gemini-powered message suggestions for clinician outreach',
+        'Implemented an automated recruiter reminder system and led the Python 3.7→3.10 migration, converting data models from marshmallow to Pydantic across a React/Next.js stack',
+      ],
+    },
+    {
+      id: 'ukg',
+      company: 'UKG',
+      title: 'Software Engineer',
+      period: 'Nov 2023 – May 2025',
+      bullets: [
+        'Led frontend feature development in Angular with AgGrid; contributed to a Java Spring Boot backend using CQRS microservice architecture with RabbitMQ for async messaging',
+        'Deployed internal tools to GCP and mentored junior engineers in best practices and code quality',
+      ],
+    },
+    {
+      id: 'nomad-health-se2',
+      company: 'Nomad Health',
+      title: 'Software Engineer II',
+      period: 'May 2022 – Oct 2023',
+      bullets: [
+        'Automated parts of the travel nurse hiring process and built a facility-facing portal for managing recruited nurses using Flask, MongoDB, Redis, and async/scheduled tasks with Beat',
+        'Integrated object-oriented APIs with React and Next.js frontends; used MongoDB aggregations to enrich API outputs',
+      ],
+    },
+    {
+      id: 'globalrose',
+      company: 'Globalrose.com LLC',
+      title: 'Software Engineer',
+      period: 'Apr 2014 – May 2022',
+      bullets: [
+        'Built a custom label-making application that automated warehouse sorting and stamping, directly reducing manual labor in day-to-day operations',
+        'Led and mentored two developers while modernizing the site frontend with JavaScript and jQuery; maintained PCI DSS compliance across all servers',
+      ],
+    },
+  ],
+}
+
 /* ─── Work ───────────────────────────────────────────────────── */
 export const WORK = {
-  sectionLabel: '02 / PROJECTS',
-  heading: 'WORK',
+  sectionLabel: '03 / PROJECTS',
+  heading: 'PROJECTS',
   projects: [
     {
       id: 'stream-manager',
@@ -94,7 +143,7 @@ export const WORK = {
       stack: 'FastAPI · React · TypeScript · MongoDB',
       description:
         'Full-stack travel companion — Python scraper seeds the DB, FastAPI serves the data, React renders it.',
-      href: 'https://github.com/issachar-vin/DragonTravelerUI',
+      href: 'https://github.com/issachar-vin/DragonTravelerAPI',
     },
     {
       id: 'chess-learner',
@@ -117,7 +166,7 @@ export const WORK = {
 
 /* ─── Skills ─────────────────────────────────────────────────── */
 export const SKILLS = {
-  sectionLabel: '03 / CAPABILITIES',
+  sectionLabel: '04 / CAPABILITIES',
   heading: 'SKILLS',
   rows: [
     // Scrolls →
@@ -149,7 +198,7 @@ export const SKILLS = {
 
 /* ─── Contact ────────────────────────────────────────────────── */
 export const CONTACT = {
-  sectionLabel: '04 / REACH OUT',
+  sectionLabel: '05 / REACH OUT',
   heading: 'CONTACT',
   prompt: '> ESTABLISH_CONNECTION',
   fields: [
