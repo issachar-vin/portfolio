@@ -163,6 +163,12 @@ export const CONTACT = {
   ],
   submitLabel: 'TRANSMIT_',
   successMessage: '> MESSAGE_RECEIVED. TALK SOON.',
+  wip: {
+    heading: '> FEATURE_PENDING',
+    body: 'The contact form is currently under development.',
+    emailLabel: 'EMAIL',
+    linkedinLabel: 'LINKEDIN',
+  },
 }
 
 /* ─── Footer ─────────────────────────────────────────────────── */
