@@ -1,12 +1,24 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { charContainer, charItem, lineContainer, lineItem, fadeUp, instant } from '../animations/variants'
+import {
+  charContainer,
+  charItem,
+  lineContainer,
+  lineItem,
+  fadeUp,
+  instant,
+} from '../animations/variants'
 import { HERO } from '../data/copy'
 
 function SplitChars({ text, className }) {
   return (
     <>
       {text.split('').map((ch, i) => (
-        <motion.span key={i} variants={charItem} className={className} style={{ display: 'inline-block' }}>
+        <motion.span
+          key={i}
+          variants={charItem}
+          className={className}
+          style={{ display: 'inline-block' }}
+        >
           {ch === ' ' ? ' ' : ch}
         </motion.span>
       ))}
@@ -17,8 +29,8 @@ function SplitChars({ text, className }) {
 export default function Hero() {
   const prefersReduced = useReducedMotion()
   const container = prefersReduced ? instant : charContainer
-  const line      = prefersReduced ? instant : lineContainer
-  const up        = prefersReduced ? instant : fadeUp
+  const line = prefersReduced ? instant : lineContainer
+  const up = prefersReduced ? instant : fadeUp
 
   return (
     <section
@@ -103,7 +115,14 @@ export default function Hero() {
           gap: '0.4rem',
         }}
       >
-        <span style={{ fontFamily: 'var(--font-body)', color: 'var(--phosphor-dim)', fontSize: '0.75rem', letterSpacing: '0.15em' }}>
+        <span
+          style={{
+            fontFamily: 'var(--font-body)',
+            color: 'var(--phosphor-dim)',
+            fontSize: '0.75rem',
+            letterSpacing: '0.15em',
+          }}
+        >
           {HERO.scrollCue}
         </span>
         <motion.span

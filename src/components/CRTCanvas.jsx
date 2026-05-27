@@ -16,8 +16,8 @@ export default function CRTCanvas() {
       ref={(canvas) => {
         if (!canvas) return
         const ctx = canvas.getContext('2d')
-        const w   = canvas.width  = window.innerWidth
-        const h   = canvas.height = window.innerHeight
+        const w = (canvas.width = window.innerWidth)
+        const h = (canvas.height = window.innerHeight)
 
         // ── 1. Phosphor ambient fill ──────────────────────────
         ctx.fillStyle = 'rgba(232, 160, 32, 0.07)'
@@ -56,21 +56,21 @@ export default function CRTCanvas() {
         ctx.translate(w * 0.28, h * 0.14)
         ctx.scale(1.8, 1)
         const spec = ctx.createRadialGradient(0, 0, 0, 0, 0, h * 0.28)
-        spec.addColorStop(0,    'rgba(255, 252, 238, 0.060)')
+        spec.addColorStop(0, 'rgba(255, 252, 238, 0.060)')
         spec.addColorStop(0.45, 'rgba(255, 252, 238, 0.016)')
-        spec.addColorStop(1,    'rgba(0,   0,   0,   0)')
+        spec.addColorStop(1, 'rgba(0,   0,   0,   0)')
         ctx.fillStyle = spec
         ctx.beginPath()
-        ctx.arc(0, 0, h * 0.30, 0, Math.PI * 2)
+        ctx.arc(0, 0, h * 0.3, 0, Math.PI * 2)
         ctx.fill()
         ctx.restore()
       }}
       style={{
-        position:      'fixed',
-        inset:         0,
+        position: 'fixed',
+        inset: 0,
         pointerEvents: 'none',
-        zIndex:        99,
-        mixBlendMode:  'screen',
+        zIndex: 99,
+        mixBlendMode: 'screen',
       }}
     />
   )

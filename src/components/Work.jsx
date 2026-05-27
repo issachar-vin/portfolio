@@ -5,15 +5,15 @@ import { WORK } from '../data/copy'
 
 /* ── Single project card ─────────────────────────────────────── */
 function ProjectCard({ project, index, prefersReduced }) {
-  const [tilt,    setTilt]    = useState({ x: 0, y: 0 })
+  const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [hovered, setHovered] = useState(false)
   const cardRef = useRef(null)
 
   const onMove = (e) => {
     if (prefersReduced || !cardRef.current) return
     const { left, top, width, height } = cardRef.current.getBoundingClientRect()
-    const cx = (e.clientX - left) / width  - 0.5
-    const cy = (e.clientY - top)  / height - 0.5
+    const cx = (e.clientX - left) / width - 0.5
+    const cy = (e.clientY - top) / height - 0.5
     setTilt({ x: cy * -7, y: cx * 7 })
   }
 
@@ -24,10 +24,7 @@ function ProjectCard({ project, index, prefersReduced }) {
 
   return (
     // motion.article handles the clip-path reveal; inner div owns the tilt
-    <motion.article
-      variants={cardItem}
-      style={{ height: '100%' }}
-    >
+    <motion.article variants={cardItem} style={{ height: '100%' }}>
       <a
         href={project.href}
         target="_blank"
@@ -41,44 +38,48 @@ function ProjectCard({ project, index, prefersReduced }) {
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={onLeave}
           style={{
-            height:     '100%',
-            border:     `1px solid ${hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)'}`,
+            height: '100%',
+            border: `1px solid ${hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)'}`,
             background: 'var(--surface)',
-            padding:    '1.75rem 2rem 2rem',
-            display:    'flex',
+            padding: '1.75rem 2rem 2rem',
+            display: 'flex',
             flexDirection: 'column',
-            transform:  prefersReduced
+            transform: prefersReduced
               ? 'none'
               : `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-            boxShadow:  hovered
-              ? '0 0 40px var(--glow-strong), 0 0 8px var(--glow)'
-              : 'none',
+            boxShadow: hovered ? '0 0 40px var(--glow-strong), 0 0 8px var(--glow)' : 'none',
             transition: hovered
               ? 'border-color 0.15s, box-shadow 0.2s, transform 0.08s'
               : 'border-color 0.3s, box-shadow 0.4s, transform 0.5s ease',
           }}
         >
           {/* Number + arrow */}
-          <div style={{
-            display:        'flex',
-            justifyContent: 'space-between',
-            alignItems:     'flex-start',
-            marginBottom:   '1.75rem',
-          }}>
-            <span style={{
-              fontFamily:    'var(--font-body)',
-              color:         'var(--phosphor-faint)',
-              fontSize:      '0.68rem',
-              letterSpacing: '0.15em',
-            }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginBottom: '1.75rem',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: 'var(--font-body)',
+                color: 'var(--phosphor-faint)',
+                fontSize: '0.68rem',
+                letterSpacing: '0.15em',
+              }}
+            >
               {String(index + 1).padStart(2, '0')}
             </span>
-            <span style={{
-              fontFamily: 'var(--font-body)',
-              color:      hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)',
-              fontSize:   '1.1rem',
-              transition: 'color 0.2s',
-            }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-body)',
+                color: hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)',
+                fontSize: '1.1rem',
+                transition: 'color 0.2s',
+              }}
+            >
               ↗
             </span>
           </div>
@@ -87,33 +88,37 @@ function ProjectCard({ project, index, prefersReduced }) {
           <h3
             className={hovered ? 'glow-text' : ''}
             style={{
-              fontSize:     'clamp(1.2rem, 2.5vw, 1.6rem)',
+              fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)',
               marginBottom: '0.5rem',
-              transition:   'text-shadow 0.2s',
+              transition: 'text-shadow 0.2s',
             }}
           >
             {project.title.toUpperCase()}
           </h3>
 
           {/* Stack */}
-          <p style={{
-            fontFamily:    'var(--font-body)',
-            color:         'var(--phosphor-dim)',
-            fontSize:      '0.68rem',
-            letterSpacing: '0.12em',
-            marginBottom:  '1.25rem',
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--phosphor-dim)',
+              fontSize: '0.68rem',
+              letterSpacing: '0.12em',
+              marginBottom: '1.25rem',
+            }}
+          >
             {project.stack}
           </p>
 
           {/* Description — flex-grow pushes it down if cards differ in height */}
-          <p style={{
-            fontFamily: 'var(--font-body)',
-            color:      'var(--phosphor-dim)',
-            fontSize:   'clamp(0.82rem, 1.4vw, 0.9rem)',
-            lineHeight: 1.75,
-            flexGrow:   1,
-          }}>
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--phosphor-dim)',
+              fontSize: 'clamp(0.82rem, 1.4vw, 0.9rem)',
+              lineHeight: 1.75,
+              flexGrow: 1,
+            }}
+          >
             {project.description}
           </p>
         </div>
@@ -124,12 +129,12 @@ function ProjectCard({ project, index, prefersReduced }) {
 
 /* ── Section ─────────────────────────────────────────────────── */
 export default function Work() {
-  const ref            = useRef(null)
-  const isInView       = useInView(ref, { once: true, margin: '-15%' })
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-15%' })
   const prefersReduced = useReducedMotion()
 
   const headV = prefersReduced ? instant : headingReveal
-  const upV   = prefersReduced ? instant : fadeUp
+  const upV = prefersReduced ? instant : fadeUp
   const cardV = prefersReduced ? instant : cardContainer
 
   return (
@@ -146,11 +151,11 @@ export default function Work() {
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           style={{
-            fontFamily:    'var(--font-body)',
-            color:         'var(--phosphor-dim)',
-            fontSize:      '0.75rem',
+            fontFamily: 'var(--font-body)',
+            color: 'var(--phosphor-dim)',
+            fontSize: '0.75rem',
             letterSpacing: '0.2em',
-            marginBottom:  '0.75rem',
+            marginBottom: '0.75rem',
           }}
         >
           {WORK.sectionLabel}
@@ -174,10 +179,10 @@ export default function Work() {
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           style={{
-            display:             'grid',
+            display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-            gap:                 'clamp(1rem, 2vw, 1.5rem)',
-            alignItems:          'stretch',
+            gap: 'clamp(1rem, 2vw, 1.5rem)',
+            alignItems: 'stretch',
           }}
         >
           {WORK.projects.map((project, i) => (

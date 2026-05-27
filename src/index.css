@@ -1,24 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* ─── Design Tokens ──────────────────────────────────────────── */
 :root {
-  --bg:             #07070a;
-  --phosphor:       #e8a020;
-  --phosphor-dim:   #7a4a10;
+  --bg: #07070a;
+  --phosphor: #e8a020;
+  --phosphor-dim: #7a4a10;
   --phosphor-faint: #2a1a06;
-  --glow:           rgba(232, 160, 32, 0.12);
-  --glow-strong:    rgba(232, 160, 32, 0.30);
-  --scanline:       rgba(0, 0, 0, 0.13);
-  --surface:        #0d0b09;
-  --border:         #2a1a06;
+  --glow: rgba(232, 160, 32, 0.12);
+  --glow-strong: rgba(232, 160, 32, 0.3);
+  --scanline: rgba(0, 0, 0, 0.13);
+  --surface: #0d0b09;
+  --border: #2a1a06;
 
-  --font-display:   'VT323', monospace;
-  --font-body:      'Share Tech Mono', monospace;
+  --font-display: 'VT323', monospace;
+  --font-body: 'Share Tech Mono', monospace;
 }
 
 /* ─── Reset / Base ───────────────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -44,15 +46,14 @@ body {
   inset: 0;
   background: repeating-linear-gradient(
     to bottom,
-    transparent            0px,
-    transparent            2px,
-    rgba(0, 0, 0, 0.28)   2px,
-    rgba(0, 0, 0, 0.28)   4px
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.28) 2px,
+    rgba(0, 0, 0, 0.28) 4px
   );
   pointer-events: none;
   z-index: 100;
 }
-
 
 /* ─── CRT Vignette — rectangular tube-edge darkening ────────── */
 /* Stacked linear gradients from all four edges.                  */
@@ -62,16 +63,18 @@ body {
   position: fixed;
   inset: 0;
   background:
-    linear-gradient(to right,
-      rgba(0, 0, 0, 0.97)  0%,
-      rgba(0, 0, 0, 0)     8%,
-      rgba(0, 0, 0, 0)    92%,
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.97) 0%,
+      rgba(0, 0, 0, 0) 8%,
+      rgba(0, 0, 0, 0) 92%,
       rgba(0, 0, 0, 0.97) 100%
     ),
-    linear-gradient(to bottom,
-      rgba(0, 0, 0, 0.97)  0%,
-      rgba(0, 0, 0, 0)     7%,
-      rgba(0, 0, 0, 0)    93%,
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.97) 0%,
+      rgba(0, 0, 0, 0) 7%,
+      rgba(0, 0, 0, 0) 93%,
       rgba(0, 0, 0, 0.97) 100%
     );
   pointer-events: none;
@@ -80,10 +83,23 @@ body {
 
 /* ─── Phosphor Flicker ───────────────────────────────────────── */
 @keyframes flicker {
-  0%, 89%, 91%, 93%, 95%, 100% { opacity: 1; }
-  90%  { opacity: 0.97; }
-  92%  { opacity: 0.99; }
-  94%  { opacity: 0.96; }
+  0%,
+  89%,
+  91%,
+  93%,
+  95%,
+  100% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.97;
+  }
+  92% {
+    opacity: 0.99;
+  }
+  94% {
+    opacity: 0.96;
+  }
 }
 
 .crt-flicker {
@@ -92,8 +108,13 @@ body {
 
 /* ─── Blink ──────────────────────────────────────────────────── */
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .blink {
@@ -101,25 +122,35 @@ body {
 }
 
 /* ─── Typography ─────────────────────────────────────────────── */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-display);
   color: var(--phosphor);
   line-height: 1.1;
   letter-spacing: 0.02em;
 }
 
-h1 { font-size: clamp(3.5rem, 12vw, 9rem); }
-h2 { font-size: clamp(2rem,  6vw,  4.5rem); }
-h3 { font-size: clamp(1.4rem, 3vw, 2rem); }
+h1 {
+  font-size: clamp(3.5rem, 12vw, 9rem);
+}
+h2 {
+  font-size: clamp(2rem, 6vw, 4.5rem);
+}
+h3 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+}
 
-p, li, label {
+p,
+li,
+label {
   font-family: var(--font-body);
   color: var(--phosphor-dim);
 }
 
 .glow-text {
   text-shadow:
-    0 0 8px  var(--phosphor),
+    0 0 8px var(--phosphor),
     0 0 24px rgba(232, 160, 32, 0.35);
 }
 
@@ -138,13 +169,21 @@ p, li, label {
 }
 
 /* ─── Scrollbar ──────────────────────────────────────────────── */
-::-webkit-scrollbar       { width: 4px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--phosphor-dim); }
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--phosphor-dim);
+}
 
 /* ─── Reduced motion ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

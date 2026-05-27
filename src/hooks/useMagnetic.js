@@ -13,13 +13,13 @@ export function useMagnetic(strength = 0.35) {
       const el = ref.current
       if (!el) return
       const rect = el.getBoundingClientRect()
-      const cx = rect.left + rect.width  / 2
-      const cy = rect.top  + rect.height / 2
+      const cx = rect.left + rect.width / 2
+      const cy = rect.top + rect.height / 2
       const dx = (e.clientX - cx) * strength
       const dy = (e.clientY - cy) * strength
       el.style.transform = `translate(${dx}px, ${dy}px)`
     },
-    [strength],
+    [strength]
   )
 
   const onMouseLeave = useCallback(() => {

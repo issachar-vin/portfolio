@@ -5,13 +5,13 @@ import { ABOUT } from '../data/copy'
 import TerminalWindow from './TerminalWindow'
 
 export default function About() {
-  const ref           = useRef(null)
-  const isInView      = useInView(ref, { once: true, margin: '-15%' })
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: '-15%' })
   const prefersReduced = useReducedMotion()
 
-  const lineV   = prefersReduced ? instant : lineContainer
-  const headV   = prefersReduced ? instant : headingReveal
-  const upV     = prefersReduced ? instant : fadeUp
+  const lineV = prefersReduced ? instant : lineContainer
+  const headV = prefersReduced ? instant : headingReveal
+  const upV = prefersReduced ? instant : fadeUp
 
   return (
     <section
@@ -103,11 +103,7 @@ export default function About() {
             aria-label="Quick facts"
           >
             {ABOUT.facts.map(({ label, value }) => (
-              <motion.div
-                key={label}
-                variants={lineItem}
-                style={{ display: 'contents' }}
-              >
+              <motion.div key={label} variants={lineItem} style={{ display: 'contents' }}>
                 <dt
                   style={{
                     fontFamily: 'var(--font-body)',
