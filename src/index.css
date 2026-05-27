@@ -28,6 +28,19 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 56px;
+  scroll-padding-bottom: 52px;
+}
+
+section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 body {
@@ -205,6 +218,9 @@ label {
   .nav-hamburger {
     display: block;
   }
+  .footer-label {
+    display: none;
+  }
 }
 
 /* ─── Terminal inputs (Contact form) ────────────────────────── */
@@ -256,22 +272,6 @@ label {
 .terminal-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
-}
-
-/* ─── Skill ticker ───────────────────────────────────────────── */
-/* Inner track contains 3 copies of items; -33.333% = one copy.  */
-@keyframes ticker-fwd {
-  to {
-    transform: translateX(-33.333%);
-  }
-}
-@keyframes ticker-rev {
-  from {
-    transform: translateX(-33.333%);
-  }
-  to {
-    transform: translateX(0);
-  }
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────── */

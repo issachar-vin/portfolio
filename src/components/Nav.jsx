@@ -1,35 +1,14 @@
 import { useState, useEffect } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { SITE, NAV } from '../data/copy'
+import useActiveSection from '../hooks/useActiveSection'
 
 const SECTION_IDS = NAV.map((n) => n.href.slice(1))
-
-function useActiveSection() {
-  const [active, setActive] = useState(SECTION_IDS[0])
-
-  useEffect(() => {
-    const observers = SECTION_IDS.map((id) => {
-      const el = document.getElementById(id)
-      if (!el) return null
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) setActive(id)
-        },
-        { rootMargin: '-40% 0px -60% 0px' }
-      )
-      obs.observe(el)
-      return obs
-    })
-    return () => observers.forEach((o) => o?.disconnect())
-  }, [])
-
-  return active
-}
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const active = useActiveSection()
+  const active = useActiveSection(SECTION_IDS)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60)

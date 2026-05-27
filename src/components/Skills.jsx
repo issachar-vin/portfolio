@@ -1,82 +1,97 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { headingReveal, fadeUp, instant } from '../animations/variants'
+import { headingReveal, fadeUp, lineContainer, lineItem, instant } from '../animations/variants'
 import { SKILLS } from '../data/copy'
 
+const badgeContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.04, delayChildren: 0.1 } },
+}
+
+const badgeVariant = {
+  hidden: { opacity: 0, y: 6, scale: 0.92 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.25, ease: 'easeOut' } },
+}
+
 /* ── Badge ───────────────────────────────────────────────────── */
-function Badge({ label, ariaHidden }) {
+function Badge({ skill }) {
+  const [hovered, setHovered] = useState(false)
+
   return (
-    <span
-      aria-hidden={ariaHidden || undefined}
+    <motion.span
+      variants={badgeVariant}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         fontFamily: 'var(--font-body)',
         color: 'var(--phosphor)',
         fontSize: '0.78rem',
-        letterSpacing: '0.12em',
-        border: '1px solid var(--phosphor-dim)',
-        padding: '0.38em 0.9em',
+        letterSpacing: '0.1em',
+        border: `1px solid ${hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)'}`,
+        padding: '0.35em 0.85em',
+        background: hovered ? 'rgba(232, 160, 32, 0.07)' : 'var(--surface)',
         whiteSpace: 'nowrap',
-        background: 'var(--surface)',
-        flexShrink: 0,
+        cursor: 'default',
+        transition: 'border-color 0.15s, background 0.15s, box-shadow 0.15s, text-shadow 0.15s',
+        boxShadow: hovered ? '0 0 16px var(--glow), inset 0 0 8px var(--glow)' : 'none',
+        textShadow: hovered ? '0 0 8px var(--phosphor)' : 'none',
       }}
     >
-      {label}
-    </span>
+      {skill}
+    </motion.span>
   )
 }
 
-/* ── Scrolling row ───────────────────────────────────────────── */
-function TickerRow({ items, reverse, prefersReduced }) {
-  const [paused, setPaused] = useState(false)
-
-  if (prefersReduced) {
-    return (
-      <div
-        role="list"
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.5rem',
-          padding: '0 clamp(1.5rem, 6vw, 7rem)',
-        }}
-      >
-        {items.map((skill) => (
-          <span key={skill} role="listitem">
-            <Badge label={skill} />
-          </span>
-        ))}
-      </div>
-    )
-  }
-
-  // 3 copies → animate by -33.333% (one set width) for seamless loop
-  const tripled = [...items, ...items, ...items]
-
+/* ── Category block ──────────────────────────────────────────── */
+function CategoryBlock({ category, prefersReduced }) {
   return (
-    <div
-      aria-hidden="true"
-      style={{
-        overflow: 'hidden',
-        WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-        maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-      }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <div
+    <motion.div variants={prefersReduced ? instant : lineItem}>
+      {/* Category label */}
+      <p
         style={{
-          display: 'flex',
-          gap: '0.75rem',
-          width: 'max-content',
-          animation: `${reverse ? 'ticker-rev' : 'ticker-fwd'} 35s linear infinite`,
-          animationPlayState: paused ? 'paused' : 'running',
+          fontFamily: 'var(--font-body)',
+          color: 'var(--phosphor-dim)',
+          fontSize: '0.7rem',
+          letterSpacing: '0.18em',
+          marginBottom: '0.75rem',
         }}
       >
-        {tripled.map((skill, i) => (
-          <Badge key={`${skill}-${i}`} label={skill} ariaHidden={i >= items.length} />
-        ))}
-      </div>
-    </div>
+        {'// '}
+        {category.label}
+      </p>
+
+      {/* Badges */}
+      {prefersReduced ? (
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          {category.skills.map((skill) => (
+            <span
+              key={skill}
+              style={{
+                fontFamily: 'var(--font-body)',
+                color: 'var(--phosphor)',
+                fontSize: '0.78rem',
+                letterSpacing: '0.1em',
+                border: '1px solid var(--phosphor-dim)',
+                padding: '0.35em 0.85em',
+                background: 'var(--surface)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+      ) : (
+        <motion.div
+          variants={badgeContainer}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}
+        >
+          {category.skills.map((skill) => (
+            <Badge key={skill} skill={skill} />
+          ))}
+        </motion.div>
+      )}
+    </motion.div>
   )
 }
 
@@ -88,24 +103,17 @@ export default function Skills() {
 
   const headV = prefersReduced ? instant : headingReveal
   const upV = prefersReduced ? instant : fadeUp
+  const listV = prefersReduced ? instant : lineContainer
 
   return (
     <section
       id="skills"
       aria-labelledby="skills-heading"
       ref={ref}
-      // Vertical padding only — ticker rows are full-bleed
-      style={{ padding: 'clamp(5rem, 12vw, 9rem) 0' }}
+      style={{ padding: 'clamp(5rem, 12vw, 9rem) clamp(1.5rem, 6vw, 7rem)' }}
     >
-      {/* Heading — constrained width with side padding */}
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 clamp(1.5rem, 6vw, 7rem)',
-          marginBottom: '3.5rem',
-        }}
-      >
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Section label */}
         <motion.p
           variants={upV}
           initial="hidden"
@@ -121,22 +129,33 @@ export default function Skills() {
           {SKILLS.sectionLabel}
         </motion.p>
 
+        {/* Heading */}
         <motion.h2
           id="skills-heading"
           className="glow-text prompt"
           variants={headV}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
+          style={{ marginBottom: '3.5rem' }}
         >
           {SKILLS.heading}
         </motion.h2>
-      </div>
 
-      {/* Ticker rows — full viewport width */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        {SKILLS.rows.map((row, i) => (
-          <TickerRow key={i} items={row} reverse={i % 2 === 1} prefersReduced={prefersReduced} />
-        ))}
+        {/* Category grid */}
+        <motion.div
+          variants={listV}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+            gap: 'clamp(2rem, 4vw, 3rem)',
+          }}
+        >
+          {SKILLS.categories.map((cat) => (
+            <CategoryBlock key={cat.label} category={cat} prefersReduced={prefersReduced} />
+          ))}
+        </motion.div>
       </div>
     </section>
   )
