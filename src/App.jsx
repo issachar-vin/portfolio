@@ -3,6 +3,9 @@ import CRTCanvas from './components/CRTCanvas'
 import Hero from './components/Hero'
 import About from './components/About'
 import Work from './components/Work'
+import Skills from './components/Skills'
+import Contact from './components/Contact'
+import Footer from './components/Footer'
 
 export default function App() {
   const prefersReduced = useReducedMotion()
@@ -14,8 +17,10 @@ export default function App() {
         <Hero prefersReduced={prefersReduced} />
         <About />
         <Work />
-        {/* Sections added one by one as built */}
+        <Skills />
+        <Contact />
       </main>
+      <Footer />
     </div>
   )
 }
