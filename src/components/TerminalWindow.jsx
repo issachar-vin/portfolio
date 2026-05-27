@@ -61,7 +61,7 @@ function useTerminalSequence(active) {
           setOutputIdx(outputIdx + 1)
         })
       } else {
-        setPhase('pause')
+        after(0, () => setPhase('pause'))
       }
     }
 
