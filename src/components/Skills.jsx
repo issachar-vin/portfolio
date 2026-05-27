@@ -1,7 +1,12 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { headingReveal, fadeUp, lineContainer, lineItem, instant } from '../animations/variants'
+import { lineContainer, lineItem, instant } from '../animations/variants'
+import { useTypewriter } from '../hooks/useTypewriter'
 import { SKILLS } from '../data/copy'
+
+const S_LABEL = 20
+const S_HEADING = 35
+const S_CAT = 20
 
 const badgeContainer = {
   hidden: {},
@@ -43,10 +48,12 @@ function Badge({ skill }) {
 }
 
 /* ── Category block ──────────────────────────────────────────── */
-function CategoryBlock({ category, prefersReduced }) {
+function CategoryBlock({ category, prefersReduced, isInView, delay }) {
+  const fullLabel = `// ${category.label}`
+  const label = useTypewriter(fullLabel, isInView, { speed: S_CAT, delay })
+
   return (
     <motion.div variants={prefersReduced ? instant : lineItem}>
-      {/* Category label */}
       <p
         style={{
           fontFamily: 'var(--font-body)',
@@ -54,13 +61,15 @@ function CategoryBlock({ category, prefersReduced }) {
           fontSize: '0.7rem',
           letterSpacing: '0.18em',
           marginBottom: '0.75rem',
+          position: 'relative',
         }}
       >
-        {'// '}
-        {category.label}
+        <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+          {fullLabel}
+        </span>
+        <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{label}</span>
       </p>
 
-      {/* Badges */}
       {prefersReduced ? (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
           {category.skills.map((skill) => (
@@ -101,9 +110,18 @@ export default function Skills() {
   const isInView = useInView(ref, { once: false, margin: '-15%' })
   const prefersReduced = useReducedMotion()
 
-  const headV = prefersReduced ? instant : headingReveal
-  const upV = prefersReduced ? instant : fadeUp
   const listV = prefersReduced ? instant : lineContainer
+
+  // Sequential chain
+  let cur = 0
+  const labelDelay = cur; cur += SKILLS.sectionLabel.length * S_LABEL
+  const headingDelay = cur; cur += SKILLS.heading.length * S_HEADING
+  const catDelays = SKILLS.categories.map(({ label }) => {
+    const d = cur; cur += `// ${label}`.length * S_CAT; return d
+  })
+
+  const sectionLabel = useTypewriter(SKILLS.sectionLabel, isInView, { speed: S_LABEL, delay: labelDelay })
+  const heading = useTypewriter(SKILLS.heading, isInView, { speed: S_HEADING, delay: headingDelay })
 
   return (
     <section
@@ -113,35 +131,34 @@ export default function Skills() {
       style={{ padding: 'clamp(5rem, 12vw, 9rem) clamp(1.5rem, 6vw, 7rem)' }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Section label */}
-        <motion.p
-          variants={upV}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+        <p
           style={{
             fontFamily: 'var(--font-body)',
             color: 'var(--phosphor-dim)',
             fontSize: '0.75rem',
             letterSpacing: '0.2em',
             marginBottom: '0.75rem',
+            position: 'relative',
           }}
         >
-          {SKILLS.sectionLabel}
-        </motion.p>
+          <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            {SKILLS.sectionLabel}
+          </span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabel}</span>
+        </p>
 
-        {/* Heading */}
-        <motion.h2
+        <h2
           id="skills-heading"
           className="glow-text prompt"
-          variants={headV}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          style={{ marginBottom: '3.5rem' }}
+          aria-label={SKILLS.heading}
+          style={{ marginBottom: '3.5rem', position: 'relative' }}
         >
-          {SKILLS.heading}
-        </motion.h2>
+          <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
+            {SKILLS.heading}
+          </span>
+          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{heading}</span>
+        </h2>
 
-        {/* Category grid */}
         <motion.div
           variants={listV}
           initial="hidden"
@@ -152,8 +169,14 @@ export default function Skills() {
             gap: 'clamp(2rem, 4vw, 3rem)',
           }}
         >
-          {SKILLS.categories.map((cat) => (
-            <CategoryBlock key={cat.label} category={cat} prefersReduced={prefersReduced} />
+          {SKILLS.categories.map((cat, i) => (
+            <CategoryBlock
+              key={cat.label}
+              category={cat}
+              prefersReduced={prefersReduced}
+              isInView={isInView}
+              delay={catDelays[i]}
+            />
           ))}
         </motion.div>
       </div>

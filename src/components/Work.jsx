@@ -1,13 +1,24 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { cardContainer, cardItem, headingReveal, fadeUp, instant } from '../animations/variants'
+import { cardContainer, cardItem, instant } from '../animations/variants'
+import { useTypewriter } from '../hooks/useTypewriter'
 import { WORK } from '../data/copy'
 
+const S_LABEL = 20
+const S_HEADING = 35
+const S_NAME = 20
+const S_SHORT = 12
+const S_BODY = 3
+
 /* ── Single project card ─────────────────────────────────────── */
-function ProjectCard({ project, index, prefersReduced }) {
+function ProjectCard({ project, index, prefersReduced, isInView, titleDelay, stackDelay, descDelay }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [hovered, setHovered] = useState(false)
   const cardRef = useRef(null)
+
+  const title = useTypewriter(project.title.toUpperCase(), isInView, { speed: S_NAME, delay: titleDelay })
+  const stack = useTypewriter(project.stack, isInView, { speed: S_SHORT, delay: stackDelay })
+  const description = useTypewriter(project.description, isInView, { speed: S_BODY, delay: descDelay })
 
   const onMove = (e) => {
     if (prefersReduced || !cardRef.current) return
@@ -23,7 +34,6 @@ function ProjectCard({ project, index, prefersReduced }) {
   }
 
   return (
-    // motion.article handles the clip-path reveal; inner div owns the tilt
     <motion.article variants={cardItem} style={{ height: '100%' }}>
       <a
         href={project.href}
@@ -91,9 +101,13 @@ function ProjectCard({ project, index, prefersReduced }) {
               fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)',
               marginBottom: '0.5rem',
               transition: 'text-shadow 0.2s',
+              position: 'relative',
             }}
           >
-            {project.title.toUpperCase()}
+            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+              {project.title.toUpperCase()}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{title}</span>
           </h3>
 
           {/* Stack */}
@@ -104,12 +118,16 @@ function ProjectCard({ project, index, prefersReduced }) {
               fontSize: '0.68rem',
               letterSpacing: '0.12em',
               marginBottom: '1.25rem',
+              position: 'relative',
             }}
           >
-            {project.stack}
+            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+              {project.stack}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{stack}</span>
           </p>
 
-          {/* Description — flex-grow pushes it down if cards differ in height */}
+          {/* Description */}
           <p
             style={{
               fontFamily: 'var(--font-body)',
@@ -117,9 +135,13 @@ function ProjectCard({ project, index, prefersReduced }) {
               fontSize: 'clamp(0.82rem, 1.4vw, 0.9rem)',
               lineHeight: 1.75,
               flexGrow: 1,
+              position: 'relative',
             }}
           >
-            {project.description}
+            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+              {project.description}
+            </span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{description}</span>
           </p>
         </div>
       </a>
@@ -133,9 +155,21 @@ export default function Work() {
   const isInView = useInView(ref, { once: false, margin: '-15%' })
   const prefersReduced = useReducedMotion()
 
-  const headV = prefersReduced ? instant : headingReveal
-  const upV = prefersReduced ? instant : fadeUp
   const cardV = prefersReduced ? instant : cardContainer
+
+  // Sequential chain
+  let cur = 0
+  const labelDelay = cur; cur += WORK.sectionLabel.length * S_LABEL
+  const headingDelay = cur; cur += WORK.heading.length * S_HEADING
+  const projectChains = WORK.projects.map((project) => {
+    const titleDelay = cur; cur += project.title.toUpperCase().length * S_NAME
+    const stackDelay = cur; cur += project.stack.length * S_SHORT
+    const descDelay = cur; cur += project.description.length * S_BODY
+    return { titleDelay, stackDelay, descDelay }
+  })
+
+  const sectionLabel = useTypewriter(WORK.sectionLabel, isInView, { speed: S_LABEL, delay: labelDelay })
+  const heading = useTypewriter(WORK.heading, isInView, { speed: S_HEADING, delay: headingDelay })
 
   return (
     <section
@@ -145,35 +179,34 @@ export default function Work() {
       style={{ padding: 'clamp(5rem, 12vw, 9rem) clamp(1.5rem, 6vw, 7rem)' }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Section label */}
-        <motion.p
-          variants={upV}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+        <p
           style={{
             fontFamily: 'var(--font-body)',
             color: 'var(--phosphor-dim)',
             fontSize: '0.75rem',
             letterSpacing: '0.2em',
             marginBottom: '0.75rem',
+            position: 'relative',
           }}
         >
-          {WORK.sectionLabel}
-        </motion.p>
+          <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            {WORK.sectionLabel}
+          </span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabel}</span>
+        </p>
 
-        {/* Heading */}
-        <motion.h2
+        <h2
           id="work-heading"
           className="glow-text prompt"
-          variants={headV}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          style={{ marginBottom: '3.5rem' }}
+          aria-label={WORK.heading}
+          style={{ marginBottom: '3.5rem', position: 'relative' }}
         >
-          {WORK.heading}
-        </motion.h2>
+          <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
+            {WORK.heading}
+          </span>
+          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{heading}</span>
+        </h2>
 
-        {/* Cards */}
         <motion.div
           variants={cardV}
           initial="hidden"
@@ -191,6 +224,8 @@ export default function Work() {
               project={project}
               index={i}
               prefersReduced={prefersReduced}
+              isInView={isInView}
+              {...projectChains[i]}
             />
           ))}
         </motion.div>
