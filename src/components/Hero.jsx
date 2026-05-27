@@ -41,7 +41,7 @@ export default function Hero() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: 'clamp(1.5rem, 6vw, 7rem)',
+        padding: 'clamp(1.5rem, 3vw, 3rem) clamp(1.5rem, 6vw, 7rem)',
         position: 'relative',
       }}
     >
@@ -97,42 +97,6 @@ export default function Hero() {
       >
         <motion.span variants={lineItem}>{HERO.title}</motion.span>
       </motion.p>
-
-      {/* Scroll cue */}
-      <motion.div
-        variants={up}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 1.4 }}
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          bottom: 'clamp(2rem, 5vw, 3.5rem)',
-          left: 'clamp(1.5rem, 6vw, 7rem)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '0.4rem',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: 'var(--font-body)',
-            color: 'var(--phosphor-dim)',
-            fontSize: '0.75rem',
-            letterSpacing: '0.15em',
-          }}
-        >
-          {HERO.scrollCue}
-        </span>
-        <motion.span
-          style={{ display: 'block', color: 'var(--phosphor)', fontSize: '1.2rem' }}
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          ↓
-        </motion.span>
-      </motion.div>
     </section>
   )
 }

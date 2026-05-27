@@ -21,8 +21,8 @@ export const SOCIAL = [
 export const NAV = [
   { label: 'ABOUT', href: '#about' },
   { label: 'EXPERIENCE', href: '#experience' },
-  { label: 'PROJECTS', href: '#work' },
   { label: 'SKILLS', href: '#skills' },
+  { label: 'PROJECTS', href: '#projects' },
   { label: 'CONTACT', href: '#contact' },
 ]
 
@@ -126,7 +126,7 @@ export const EXPERIENCE = {
 
 /* ─── Work ───────────────────────────────────────────────────── */
 export const WORK = {
-  sectionLabel: '03 / PROJECTS',
+  sectionLabel: '04 / PROJECTS',
   heading: 'PROJECTS',
   projects: [
     {
@@ -166,33 +166,52 @@ export const WORK = {
 
 /* ─── Skills ─────────────────────────────────────────────────── */
 export const SKILLS = {
-  sectionLabel: '04 / CAPABILITIES',
+  sectionLabel: '03 / CAPABILITIES',
   heading: 'SKILLS',
-  rows: [
-    // Scrolls →
-    [
-      'PYTHON',
-      'FASTAPI',
-      'DJANGO',
-      'FLASK',
-      'REACT',
-      'NEXT.JS',
-      'TYPESCRIPT',
-      'NODE.JS',
-      'ANGULAR',
-    ],
-    // Scrolls ←
-    [
-      'DOCKER',
-      'KUBERNETES',
-      'AWS',
-      'GCP',
-      'MONGODB',
-      'POSTGRES',
-      'GITHUB ACTIONS',
-      'DATADOG',
-      'REDIS',
-    ],
+  categories: [
+    {
+      label: 'FRONTEND',
+      skills: ['REACT', 'NEXT.JS', 'ANGULAR', 'TYPESCRIPT', 'JAVASCRIPT', 'HTML/CSS', 'BOOTSTRAP'],
+    },
+    {
+      label: 'BACKEND',
+      skills: ['PYTHON', 'NODE.JS', 'JAVA'],
+    },
+    {
+      label: 'API',
+      skills: ['FASTAPI', 'DJANGO', 'FLASK', 'REST', 'GRAPHQL'],
+    },
+    {
+      label: 'TOOLS',
+      skills: [
+        'DOCKER',
+        'KUBERNETES',
+        'AWS',
+        'GCP',
+        'MONGODB',
+        'POSTGRES',
+        'REDIS',
+        'MYSQL',
+        'GIT',
+        'NGINX',
+      ],
+    },
+    {
+      label: 'CI/CD',
+      skills: ['GITHUB ACTIONS', 'CIRCLECI', 'JENKINS', 'DATADOG', 'SPLUNK', 'ELASTICSEARCH'],
+    },
+    {
+      label: 'AI',
+      skills: [
+        'CLAUDE CODE',
+        'CURSOR',
+        'SKILLS',
+        'GITHUB COPILOT',
+        'WINDSURF',
+        'CHATGPT',
+        'GEMINI',
+      ],
+    },
   ],
 }
 

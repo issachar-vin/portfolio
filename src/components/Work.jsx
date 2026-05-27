@@ -139,7 +139,7 @@ export default function Work() {
 
   return (
     <section
-      id="work"
+      id="projects"
       aria-labelledby="work-heading"
       ref={ref}
       style={{ padding: 'clamp(5rem, 12vw, 9rem) clamp(1.5rem, 6vw, 7rem)' }}
