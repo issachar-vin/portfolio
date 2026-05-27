@@ -34,8 +34,10 @@ function TypewriterCycle({ phrases }) {
     } else if (deleting && displayed.length > 0) {
       t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 35)
     } else if (deleting && displayed.length === 0) {
-      setDeleting(false)
-      setIndex((i) => (i + 1) % phrases.length)
+      t = setTimeout(() => {
+        setDeleting(false)
+        setIndex((i) => (i + 1) % phrases.length)
+      }, 0)
     }
 
     return () => clearTimeout(t)
