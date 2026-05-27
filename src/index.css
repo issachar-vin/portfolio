@@ -96,63 +96,52 @@ body {
 
 /* ─── Phosphor Flicker ───────────────────────────────────────── */
 /* Irregular opacity dips simulate phosphor instability.          */
-/* filter: brightness adds a secondary luminance jitter.          */
+/* NOTE: filter/transform must NOT be used here — either property */
+/* creates a new CSS containing block and breaks position:fixed   */
+/* on the canvas, nav, footer, scanlines, and vignette overlays.  */
 @keyframes flicker {
   0%,
   100% {
     opacity: 1;
-    filter: brightness(1);
   }
   /* micro-dip cluster around 18% */
   17.5% {
     opacity: 0.98;
-    filter: brightness(0.97);
   }
   18% {
-    opacity: 0.91;
-    filter: brightness(0.88);
+    opacity: 0.88;
   }
   18.5% {
     opacity: 1;
-    filter: brightness(1.03);
   }
   19% {
-    opacity: 0.96;
-    filter: brightness(0.95);
+    opacity: 0.94;
   }
   19.5% {
     opacity: 1;
-    filter: brightness(1);
   }
   /* single sharp dip at 47% */
   47% {
-    opacity: 0.93;
-    filter: brightness(0.9);
+    opacity: 0.9;
   }
   47.3% {
     opacity: 1;
-    filter: brightness(1.02);
   }
   /* double flick at 73% */
   72.8% {
-    opacity: 0.97;
-    filter: brightness(0.96);
+    opacity: 0.96;
   }
   73% {
-    opacity: 0.84;
-    filter: brightness(0.82);
+    opacity: 0.82;
   }
   73.3% {
     opacity: 1;
-    filter: brightness(1.04);
   }
   73.7% {
-    opacity: 0.95;
-    filter: brightness(0.93);
+    opacity: 0.93;
   }
   74% {
     opacity: 1;
-    filter: brightness(1);
   }
 }
 
