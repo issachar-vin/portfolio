@@ -30,7 +30,13 @@ export const NAV = [
 export const HERO = {
   bootLine: 'TERMINAL_OS v1.0.0 — READY',
   name: 'ISSACHAR_VINAJERAS',
-  title: '> FULL-STACK ENGINEER · PROBLEM SOLVER · BUILDER',
+  titleOptions: [
+    'FULL-STACK ENGINEER',
+    'PROBLEM SOLVER',
+    'BUILDER',
+    'PYTHON DEVELOPER',
+    'REACT DEVELOPER',
+  ],
   scrollCue: 'SCROLL',
 }
 

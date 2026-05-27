@@ -93,7 +93,7 @@ function RoleEntry({ role, prefersReduced }) {
 
 export default function Experience() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-15%' })
+  const isInView = useInView(ref, { once: false, margin: '-15%' })
   const prefersReduced = useReducedMotion()
 
   const headV = prefersReduced ? instant : headingReveal
