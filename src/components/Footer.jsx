@@ -5,7 +5,7 @@ export default function Footer() {
     <footer
       style={{
         borderTop: '1px solid var(--phosphor-faint)',
-        padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 6vw, 7rem)',
+        padding: 'clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 6vw, 7rem) clamp(4rem, 8vw, 6rem)',
       }}
     >
       <div
