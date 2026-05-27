@@ -1,4 +1,10 @@
+import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { FOOTER, SOCIAL } from '../data/copy'
+
+const ICONS = {
+  GitHub: FaGithub,
+  LinkedIn: FaLinkedin,
+}
 
 export default function Footer() {
   return (
@@ -50,32 +56,40 @@ export default function Footer() {
             style={{
               listStyle: 'none',
               display: 'flex',
-              gap: '1.75rem',
+              gap: '1.5rem',
               margin: 0,
               padding: 0,
             }}
           >
-            {SOCIAL.map(({ label, href }) => (
-              <li key={label}>
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    color: 'var(--phosphor-dim)',
-                    fontSize: '0.72rem',
-                    letterSpacing: '0.12em',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--phosphor)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--phosphor-dim)')}
-                >
-                  {label.toUpperCase()}
-                </a>
-              </li>
-            ))}
+            {SOCIAL.map(({ label, href }) => {
+              const Icon = ICONS[label]
+              return (
+                <li key={label}>
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                      fontFamily: 'var(--font-body)',
+                      color: 'var(--phosphor-dim)',
+                      fontSize: '0.72rem',
+                      letterSpacing: '0.12em',
+                      textDecoration: 'none',
+                      transition: 'color 0.2s',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--phosphor)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--phosphor-dim)')}
+                  >
+                    {Icon && <Icon size={15} aria-hidden="true" />}
+                    {label.toUpperCase()}
+                  </a>
+                </li>
+              )
+            })}
           </ul>
         </nav>
       </div>
