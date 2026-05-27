@@ -6,7 +6,7 @@ import TerminalWindow from './TerminalWindow'
 
 export default function About() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-15%' })
+  const isInView = useInView(ref, { once: false, margin: '-15%' })
   const prefersReduced = useReducedMotion()
 
   const lineV = prefersReduced ? instant : lineContainer

@@ -156,7 +156,7 @@ function WipModal({ onClose }) {
 /* ── Section ─────────────────────────────────────────────────── */
 export default function Contact() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-15%' })
+  const isInView = useInView(ref, { once: false, margin: '-15%' })
   const prefersReduced = useReducedMotion()
 
   const [fields, setFields] = useState({ name: '', message: '' })
