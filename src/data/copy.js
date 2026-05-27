@@ -18,6 +18,13 @@ export const SOCIAL = [
   { label: 'LinkedIn', href: 'https://linkedin.com/in/ivinajeras' },
 ]
 
+export const NAV = [
+  { label: 'ABOUT', href: '#about' },
+  { label: 'WORK', href: '#work' },
+  { label: 'SKILLS', href: '#skills' },
+  { label: 'CONTACT', href: '#contact' },
+]
+
 /* ─── Hero ───────────────────────────────────────────────────── */
 export const HERO = {
   bootLine: 'TERMINAL_OS v1.0.0 — READY',

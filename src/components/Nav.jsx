@@ -1,0 +1,171 @@
+import { useState, useEffect } from 'react'
+import { FaBars, FaTimes } from 'react-icons/fa'
+import { SITE, NAV } from '../data/copy'
+
+const SECTION_IDS = NAV.map((n) => n.href.slice(1))
+
+function useActiveSection() {
+  const [active, setActive] = useState(SECTION_IDS[0])
+
+  useEffect(() => {
+    const observers = SECTION_IDS.map((id) => {
+      const el = document.getElementById(id)
+      if (!el) return null
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActive(id)
+        },
+        { rootMargin: '-40% 0px -60% 0px' }
+      )
+      obs.observe(el)
+      return obs
+    })
+    return () => observers.forEach((o) => o?.disconnect())
+  }, [])
+
+  return active
+}
+
+export default function Nav() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const active = useActiveSection()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
+
+  const handleClick = (e, href) => {
+    e.preventDefault()
+    setMenuOpen(false)
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  return (
+    <>
+      <nav
+        aria-label="Main navigation"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 300,
+          height: '56px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 clamp(1.5rem, 6vw, 7rem)',
+          background: scrolled ? 'rgba(7, 7, 10, 0.94)' : 'rgba(7, 7, 10, 0.6)',
+          borderBottom: `1px solid ${scrolled ? 'var(--phosphor-faint)' : 'transparent'}`,
+          backdropFilter: 'blur(8px)',
+          transition: 'background 0.35s, border-color 0.35s',
+        }}
+      >
+        {/* Logo */}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault()
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+          style={{
+            fontFamily: 'var(--font-display)',
+            color: 'var(--phosphor)',
+            fontSize: '1.15rem',
+            letterSpacing: '0.06em',
+            textDecoration: 'none',
+          }}
+        >
+          {SITE.handle}
+        </a>
+
+        {/* Desktop links */}
+        <ul className="nav-links">
+          {NAV.map(({ label, href }) => {
+            const isActive = active === href.slice(1)
+            return (
+              <li key={label}>
+                <a
+                  href={href}
+                  onClick={(e) => handleClick(e, href)}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.16em',
+                    textDecoration: 'none',
+                    color: isActive ? 'var(--phosphor)' : 'var(--phosphor-dim)',
+                    textShadow: isActive
+                      ? '0 0 8px var(--phosphor), 0 0 20px rgba(232,160,32,0.3)'
+                      : 'none',
+                    transition: 'color 0.2s, text-shadow 0.2s',
+                  }}
+                >
+                  {label}
+                </a>
+              </li>
+            )
+          })}
+        </ul>
+
+        {/* Mobile hamburger */}
+        <button
+          className="nav-hamburger"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((o) => !o)}
+        >
+          {menuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+        </button>
+      </nav>
+
+      {/* Mobile overlay */}
+      {menuOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 299,
+            background: 'rgba(7, 7, 10, 0.97)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '2.5rem',
+          }}
+        >
+          {NAV.map(({ label, href }) => (
+            <a
+              key={label}
+              href={href}
+              onClick={(e) => handleClick(e, href)}
+              className="glow-text"
+              style={{
+                fontFamily: 'var(--font-display)',
+                color: 'var(--phosphor)',
+                fontSize: 'clamp(2.2rem, 10vw, 3.2rem)',
+                letterSpacing: '0.08em',
+                textDecoration: 'none',
+              }}
+            >
+              &gt;&nbsp;{label}
+            </a>
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
