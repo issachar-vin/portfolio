@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { lineContainer, lineItem, instant } from '../animations/variants'
-import { useTypewriter } from '../hooks/useTypewriter'
+import { useTypingSequence } from '../hooks/useTypingSequence'
 import { CONTACT, SITE, SOCIAL } from '../data/copy'
 
 const linkedinHref = SOCIAL.find((s) => s.label === 'LinkedIn')?.href
@@ -10,7 +10,6 @@ const linkedinHref = SOCIAL.find((s) => s.label === 'LinkedIn')?.href
 function WipModal({ onClose }) {
   const closeRef = useRef(null)
 
-  // Focus the close button on open; close on Escape
   useEffect(() => {
     closeRef.current?.focus()
     const onKey = (e) => {
@@ -53,7 +52,6 @@ function WipModal({ onClose }) {
           position: 'relative',
         }}
       >
-        {/* Close button */}
         <button
           ref={closeRef}
           onClick={onClose}
@@ -77,7 +75,6 @@ function WipModal({ onClose }) {
           [X]
         </button>
 
-        {/* Heading */}
         <h3
           id="wip-heading"
           className="glow-text"
@@ -86,7 +83,6 @@ function WipModal({ onClose }) {
           {CONTACT.wip.heading}
         </h3>
 
-        {/* Body */}
         <p
           style={{
             fontFamily: 'var(--font-body)',
@@ -99,7 +95,6 @@ function WipModal({ onClose }) {
           {CONTACT.wip.body}
         </p>
 
-        {/* Links */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <a
             href={`mailto:${SITE.email}`}
@@ -165,15 +160,11 @@ export default function Contact() {
 
   const lineV = prefersReduced ? instant : lineContainer
 
-  // Sequential chain
-  let cur = 0
-  const labelDelay = cur; cur += CONTACT.sectionLabel.length * 20
-  const headingDelay = cur; cur += CONTACT.heading.length * 35
-  const promptDelay = cur
-
-  const sectionLabelText = useTypewriter(CONTACT.sectionLabel, isInView, { speed: 20, delay: labelDelay })
-  const headingText = useTypewriter(CONTACT.heading, isInView, { speed: 35, delay: headingDelay })
-  const promptText = useTypewriter(CONTACT.prompt, isInView, { speed: 20, delay: promptDelay })
+  const [sectionLabelText, headingText, promptText] = useTypingSequence(isInView, [
+    { text: CONTACT.sectionLabel, speed: 20 },
+    { text: CONTACT.heading, speed: 35 },
+    { text: CONTACT.prompt, speed: 20 },
+  ])
 
   const onChange = (e) => setFields((f) => ({ ...f, [e.target.name]: e.target.value }))
   const onSubmit = (e) => {
@@ -192,7 +183,6 @@ export default function Contact() {
         style={{ padding: 'clamp(5rem, 12vw, 9rem) clamp(1.5rem, 6vw, 7rem)' }}
       >
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Section label */}
           <p
             style={{
               fontFamily: 'var(--font-body)',
@@ -209,7 +199,6 @@ export default function Contact() {
             <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
           </p>
 
-          {/* Heading */}
           <h2
             id="contact-heading"
             className="glow-text prompt"
@@ -222,7 +211,6 @@ export default function Contact() {
             <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
           </h2>
 
-          {/* Prompt line */}
           <p
             style={{
               fontFamily: 'var(--font-body)',
@@ -239,7 +227,6 @@ export default function Contact() {
             <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{promptText}</span>
           </p>
 
-          {/* Form */}
           <motion.form
             onSubmit={onSubmit}
             variants={lineV}

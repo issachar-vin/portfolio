@@ -1,17 +1,12 @@
 import { useRef } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { fadeUp, instant } from '../animations/variants'
-import { useTypewriter } from '../hooks/useTypewriter'
+import { useTypingSequence } from '../hooks/useTypingSequence'
 import { ABOUT } from '../data/copy'
 import TerminalWindow from './TerminalWindow'
 
-const S_LABEL = 20
-const S_HEADING = 35
-const S_BODY = 3
-const S_FACT = 12
-
-function BioLine({ line, isInView, delay }) {
-  const text = useTypewriter(line, isInView, { speed: S_BODY, delay })
+/* ── Presentational sub-components ──────────────────────────── */
+function BioLine({ line, displayedText }) {
   return (
     <p
       style={{
@@ -25,13 +20,12 @@ function BioLine({ line, isInView, delay }) {
       <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
         {line}
       </span>
-      <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{text}</span>
+      <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{displayedText}</span>
     </p>
   )
 }
 
-function FactItem({ label, value, isInView, delay }) {
-  const displayedValue = useTypewriter(value, isInView, { speed: S_FACT, delay })
+function FactItem({ label, value, displayedValue }) {
   return (
     <div style={{ display: 'contents' }}>
       <dt
@@ -64,26 +58,29 @@ function FactItem({ label, value, isInView, delay }) {
   )
 }
 
+/* ── Section ─────────────────────────────────────────────────── */
 export default function About() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: false, margin: '-15%' })
   const prefersReduced = useReducedMotion()
   const upV = prefersReduced ? instant : fadeUp
 
-  // Sequential chain: each item starts when the previous finishes
-  let cur = 0
-  const labelDelay = cur; cur += ABOUT.sectionLabel.length * S_LABEL
-  const headingDelay = cur; cur += ABOUT.heading.length * S_HEADING
-  const bioLineDelays = ABOUT.bio.map((line) => {
-    if (line === '') return null
-    const d = cur; cur += line.length * S_BODY; return d
-  })
-  const factValueDelays = ABOUT.facts.map(({ value }) => {
-    const d = cur; cur += value.length * S_FACT; return d
-  })
+  // Empty lines are spacers — excluded from the typing sequence
+  const bioLines = ABOUT.bio.filter((l) => l !== '')
 
-  const sectionLabel = useTypewriter(ABOUT.sectionLabel, isInView, { speed: S_LABEL, delay: labelDelay })
-  const heading = useTypewriter(ABOUT.heading, isInView, { speed: S_HEADING, delay: headingDelay })
+  const [sectionLabelText, headingText, ...rest] = useTypingSequence(isInView, [
+    { text: ABOUT.sectionLabel, speed: 20 },
+    { text: ABOUT.heading, speed: 35 },
+    ...bioLines.map((l) => ({ text: l, speed: 3 })),
+    ...ABOUT.facts.map((f) => ({ text: f.value, speed: 12 })),
+  ])
+
+  const bioTexts = rest.slice(0, bioLines.length)
+  const factTexts = rest.slice(bioLines.length)
+
+  // Maps each ABOUT.bio index to its position in bioLines (or -1 for spacers)
+  let bioIdx = 0
+  const bioLineIdxMap = ABOUT.bio.map((line) => (line === '' ? -1 : bioIdx++))
 
   return (
     <section
@@ -117,7 +114,7 @@ export default function About() {
             <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
               {ABOUT.sectionLabel}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabel}</span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
           </p>
 
           <h2
@@ -129,13 +126,13 @@ export default function About() {
             <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
               {ABOUT.heading}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{heading}</span>
+            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
           </h2>
 
           <div role="region" aria-label="Biography">
             {ABOUT.bio.map((line, i) => {
               if (line === '') return <div key={i} style={{ height: '1rem' }} aria-hidden="true" />
-              return <BioLine key={i} line={line} isInView={isInView} delay={bioLineDelays[i]} />
+              return <BioLine key={i} line={line} displayedText={bioTexts[bioLineIdxMap[i]]} />
             })}
           </div>
 
@@ -154,8 +151,7 @@ export default function About() {
                 key={label}
                 label={label}
                 value={value}
-                isInView={isInView}
-                delay={factValueDelays[i]}
+                displayedValue={factTexts[i]}
               />
             ))}
           </dl>

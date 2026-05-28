@@ -1,12 +1,8 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { lineContainer, lineItem, instant } from '../animations/variants'
-import { useTypewriter } from '../hooks/useTypewriter'
+import { useTypingSequence } from '../hooks/useTypingSequence'
 import { SKILLS } from '../data/copy'
-
-const S_LABEL = 20
-const S_HEADING = 35
-const S_CAT = 20
 
 const badgeContainer = {
   hidden: {},
@@ -48,9 +44,8 @@ function Badge({ skill }) {
 }
 
 /* ── Category block ──────────────────────────────────────────── */
-function CategoryBlock({ category, prefersReduced, isInView, delay }) {
+function CategoryBlock({ category, prefersReduced, labelText }) {
   const fullLabel = `// ${category.label}`
-  const label = useTypewriter(fullLabel, isInView, { speed: S_CAT, delay })
 
   return (
     <motion.div variants={prefersReduced ? instant : lineItem}>
@@ -67,7 +62,7 @@ function CategoryBlock({ category, prefersReduced, isInView, delay }) {
         <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
           {fullLabel}
         </span>
-        <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{label}</span>
+        <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{labelText}</span>
       </p>
 
       {prefersReduced ? (
@@ -112,16 +107,11 @@ export default function Skills() {
 
   const listV = prefersReduced ? instant : lineContainer
 
-  // Sequential chain
-  let cur = 0
-  const labelDelay = cur; cur += SKILLS.sectionLabel.length * S_LABEL
-  const headingDelay = cur; cur += SKILLS.heading.length * S_HEADING
-  const catDelays = SKILLS.categories.map(({ label }) => {
-    const d = cur; cur += `// ${label}`.length * S_CAT; return d
-  })
-
-  const sectionLabel = useTypewriter(SKILLS.sectionLabel, isInView, { speed: S_LABEL, delay: labelDelay })
-  const heading = useTypewriter(SKILLS.heading, isInView, { speed: S_HEADING, delay: headingDelay })
+  const [sectionLabelText, headingText, ...catLabelTexts] = useTypingSequence(isInView, [
+    { text: SKILLS.sectionLabel, speed: 20 },
+    { text: SKILLS.heading, speed: 35 },
+    ...SKILLS.categories.map((cat) => ({ text: `// ${cat.label}`, speed: 20 })),
+  ])
 
   return (
     <section
@@ -144,7 +134,7 @@ export default function Skills() {
           <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
             {SKILLS.sectionLabel}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabel}</span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
         </p>
 
         <h2
@@ -156,7 +146,7 @@ export default function Skills() {
           <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
             {SKILLS.heading}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{heading}</span>
+          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
         </h2>
 
         <motion.div
@@ -174,8 +164,7 @@ export default function Skills() {
               key={cat.label}
               category={cat}
               prefersReduced={prefersReduced}
-              isInView={isInView}
-              delay={catDelays[i]}
+              labelText={catLabelTexts[i]}
             />
           ))}
         </motion.div>
