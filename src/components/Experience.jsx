@@ -125,14 +125,14 @@ export default function Experience() {
 
   // Build flat item list in DOM display order
   const items = [
-    { text: EXPERIENCE.sectionLabel, speed: 20 },
-    { text: EXPERIENCE.heading, speed: 35 },
+    { text: EXPERIENCE.sectionLabel, speed: 4 },
+    { text: EXPERIENCE.heading, speed: 8 },
   ]
   EXPERIENCE.roles.forEach((role) => {
-    items.push({ text: role.company.toUpperCase(), speed: 20 })
-    items.push({ text: role.period, speed: 12 })
-    items.push({ text: role.title.toUpperCase(), speed: 12 })
-    role.bullets.forEach((b) => items.push({ text: b, speed: 3 }))
+    items.push({ text: role.company.toUpperCase(), speed: 4 })
+    items.push({ text: role.period, speed: 3 })
+    items.push({ text: role.title.toUpperCase(), speed: 3 })
+    role.bullets.forEach((b) => items.push({ text: b, speed: 1 }))
   })
 
   const [sectionLabelText, headingText, ...rest] = useTypingSequence(isInView, items)

@@ -27,13 +27,17 @@ export default function Nav() {
   const handleClick = (e, href) => {
     e.preventDefault()
     setMenuOpen(false)
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+    const el = document.querySelector(href)
+    if (!el) return
+    const target = el.getBoundingClientRect().top + window.scrollY - 56
+    window.scrollTo({ top: target, behavior: 'smooth' })
   }
 
   return (
     <>
       <nav
         aria-label="Main navigation"
+        className="glass-edge-bottom"
         style={{
           position: 'fixed',
           top: 0,
@@ -45,10 +49,10 @@ export default function Nav() {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '0 clamp(1.5rem, 6vw, 7rem)',
-          background: scrolled ? 'rgba(7, 7, 10, 0.94)' : 'rgba(7, 7, 10, 0.6)',
-          borderBottom: `1px solid ${scrolled ? 'var(--phosphor-faint)' : 'transparent'}`,
-          backdropFilter: 'blur(8px)',
-          transition: 'background 0.35s, border-color 0.35s',
+          background: scrolled ? 'rgba(0, 0, 0, 0.65)' : 'rgba(0, 0, 0, 0.45)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          transition: 'background 0.35s',
         }}
       >
         {/* Logo */}
