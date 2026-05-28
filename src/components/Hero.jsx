@@ -73,7 +73,7 @@ export default function Hero() {
       aria-label="Hero — introduction"
       ref={ref}
       style={{
-        minHeight: '100svh',
+        minHeight: 'calc(100dvh - 108px)',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
