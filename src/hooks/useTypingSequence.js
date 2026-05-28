@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useReducedMotion } from 'framer-motion'
 
 // items: [{ text: string, speed: number }] in display order
@@ -6,42 +6,35 @@ import { useReducedMotion } from 'framer-motion'
 export function useTypingSequence(isInView, items) {
   const prefersReduced = useReducedMotion()
 
-  // Stable identity key so the effect doesn't re-run on every render
-  // (items is a new array reference each render since it's defined inline)
+  // Memoize by text content so the effect doesn't re-run on every render
+  // (items is a new array reference each render since callers define it inline)
   const key = items.map(i => i.text).join('\0')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const stableItems = useMemo(() => items, [key])
 
-  const stableItems = useRef(items)
-  const prevKey = useRef(key)
-  if (prevKey.current !== key) {
-    prevKey.current = key
-    stableItems.current = items
-  }
-
-  const [states, setStates] = useState(() =>
-    items.map(item => (prefersReduced ? item.text : ''))
-  )
+  const [states, setStates] = useState(() => stableItems.map(() => ''))
 
   useEffect(() => {
-    const seq = stableItems.current
-    if (prefersReduced) {
-      setStates(seq.map(i => i.text))
-      return
-    }
-    if (!isInView) {
-      setStates(seq.map(() => ''))
-      return
-    }
+    if (!isInView) return
 
     let cancelled = false
 
     function run(index) {
-      if (cancelled || index >= seq.length) return
-      const { text, speed } = seq[index]
+      if (cancelled || index >= stableItems.length) return
+      const { text, speed } = stableItems[index]
+      const isFirst = index === 0
       let i = 0
+
       function tick() {
         if (cancelled) return
         i++
-        setStates(s => s.map((v, j) => (j === index ? text.slice(0, i) : v)))
+        setStates(s => s.map((v, j) => {
+          if (j === index) return text.slice(0, i)
+          // On the first character of the first item, wipe all others clean
+          // so a re-entry doesn't flash previously-typed content
+          if (isFirst && i === 1) return ''
+          return v
+        }))
         if (i < text.length) setTimeout(tick, speed)
         else run(index + 1)
       }
@@ -50,7 +43,10 @@ export function useTypingSequence(isInView, items) {
 
     run(0)
     return () => { cancelled = true }
-  }, [isInView, prefersReduced, key]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isInView, stableItems])
 
+  // Derived returns — no setState needed for these paths
+  if (!isInView) return stableItems.map(() => '')
+  if (prefersReduced) return stableItems.map(i => i.text)
   return states
 }
