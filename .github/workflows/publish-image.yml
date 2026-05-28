@@ -1,4 +1,4 @@
-name: Deploy
+name: Publish Image
 
 on:
   push:
@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile.prod
+          target: production
           push: true
           tags: |
             ghcr.io/${{ github.repository }}:latest
