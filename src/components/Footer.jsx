@@ -16,7 +16,10 @@ function getNext(active) {
 }
 
 function scrollTo(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+  const el = document.getElementById(id)
+  if (!el) return
+  const target = el.getBoundingClientRect().top + window.scrollY - 56
+  window.scrollTo({ top: target, behavior: 'smooth' })
 }
 
 export default function Footer() {
@@ -26,16 +29,16 @@ export default function Footer() {
 
   return (
     <footer
+      className="glass-edge-top"
       style={{
         position: 'fixed',
         bottom: 0,
         left: 0,
         right: 0,
         zIndex: 200,
-        borderTop: '1px solid var(--border)',
-        background: 'rgba(7, 7, 10, 0.92)',
-        backdropFilter: 'blur(8px)',
-        WebkitBackdropFilter: 'blur(8px)',
+        background: 'rgba(0, 0, 0, 0.55)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
         padding: '0 clamp(1.5rem, 6vw, 7rem)',
         height: '52px',
         display: 'flex',
