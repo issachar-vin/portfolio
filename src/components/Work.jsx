@@ -1,24 +1,14 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
 import { cardContainer, cardItem, instant } from '../animations/variants'
-import { useTypewriter } from '../hooks/useTypewriter'
+import { useTypingSequence } from '../hooks/useTypingSequence'
 import { WORK } from '../data/copy'
 
-const S_LABEL = 20
-const S_HEADING = 35
-const S_NAME = 20
-const S_SHORT = 12
-const S_BODY = 3
-
 /* ── Single project card ─────────────────────────────────────── */
-function ProjectCard({ project, index, prefersReduced, isInView, titleDelay, stackDelay, descDelay }) {
+function ProjectCard({ project, index, prefersReduced, titleText, stackText, descText }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [hovered, setHovered] = useState(false)
   const cardRef = useRef(null)
-
-  const title = useTypewriter(project.title.toUpperCase(), isInView, { speed: S_NAME, delay: titleDelay })
-  const stack = useTypewriter(project.stack, isInView, { speed: S_SHORT, delay: stackDelay })
-  const description = useTypewriter(project.description, isInView, { speed: S_BODY, delay: descDelay })
 
   const onMove = (e) => {
     if (prefersReduced || !cardRef.current) return
@@ -104,10 +94,13 @@ function ProjectCard({ project, index, prefersReduced, isInView, titleDelay, sta
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {project.title.toUpperCase()}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{title}</span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{titleText}</span>
           </h3>
 
           {/* Stack */}
@@ -121,10 +114,13 @@ function ProjectCard({ project, index, prefersReduced, isInView, titleDelay, sta
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {project.stack}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{stack}</span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{stackText}</span>
           </p>
 
           {/* Description */}
@@ -138,10 +134,13 @@ function ProjectCard({ project, index, prefersReduced, isInView, titleDelay, sta
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {project.description}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{description}</span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{descText}</span>
           </p>
         </div>
       </a>
@@ -157,19 +156,21 @@ export default function Work() {
 
   const cardV = prefersReduced ? instant : cardContainer
 
-  // Sequential chain
-  let cur = 0
-  const labelDelay = cur; cur += WORK.sectionLabel.length * S_LABEL
-  const headingDelay = cur; cur += WORK.heading.length * S_HEADING
-  const projectChains = WORK.projects.map((project) => {
-    const titleDelay = cur; cur += project.title.toUpperCase().length * S_NAME
-    const stackDelay = cur; cur += project.stack.length * S_SHORT
-    const descDelay = cur; cur += project.description.length * S_BODY
-    return { titleDelay, stackDelay, descDelay }
-  })
+  const [sectionLabelText, headingText, ...projectRest] = useTypingSequence(isInView, [
+    { text: WORK.sectionLabel, speed: 20 },
+    { text: WORK.heading, speed: 35 },
+    ...WORK.projects.flatMap((p) => [
+      { text: p.title.toUpperCase(), speed: 20 },
+      { text: p.stack, speed: 12 },
+      { text: p.description, speed: 3 },
+    ]),
+  ])
 
-  const sectionLabel = useTypewriter(WORK.sectionLabel, isInView, { speed: S_LABEL, delay: labelDelay })
-  const heading = useTypewriter(WORK.heading, isInView, { speed: S_HEADING, delay: headingDelay })
+  const projectTexts = WORK.projects.map((_, i) => ({
+    titleText: projectRest[i * 3],
+    stackText: projectRest[i * 3 + 1],
+    descText: projectRest[i * 3 + 2],
+  }))
 
   return (
     <section
@@ -189,10 +190,15 @@ export default function Work() {
             position: 'relative',
           }}
         >
-          <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+          <span
+            aria-hidden="true"
+            style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+          >
             {WORK.sectionLabel}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabel}</span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
+            {sectionLabelText}
+          </span>
         </p>
 
         <h2
@@ -204,7 +210,9 @@ export default function Work() {
           <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
             {WORK.heading}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{heading}</span>
+          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>
+            {headingText}
+          </span>
         </h2>
 
         <motion.div
@@ -224,8 +232,7 @@ export default function Work() {
               project={project}
               index={i}
               prefersReduced={prefersReduced}
-              isInView={isInView}
-              {...projectChains[i]}
+              {...projectTexts[i]}
             />
           ))}
         </motion.div>
