@@ -17,7 +17,10 @@ function BioLine({ line, displayedText }) {
         position: 'relative',
       }}
     >
-      <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+      <span
+        aria-hidden="true"
+        style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+      >
         {line}
       </span>
       <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{displayedText}</span>
@@ -49,10 +52,15 @@ function FactItem({ label, value, displayedValue }) {
           position: 'relative',
         }}
       >
-        <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+        <span
+          aria-hidden="true"
+          style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+        >
           {value}
         </span>
-        <span style={{ position: 'absolute', top: 0, left: '1rem', right: 0 }}>{displayedValue}</span>
+        <span style={{ position: 'absolute', top: 0, left: '1rem', right: 0 }}>
+          {displayedValue}
+        </span>
       </dd>
     </div>
   )
@@ -111,10 +119,15 @@ export default function About() {
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {ABOUT.sectionLabel}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
+              {sectionLabelText}
+            </span>
           </p>
 
           <h2
@@ -126,7 +139,9 @@ export default function About() {
             <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
               {ABOUT.heading}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
+            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>
+              {headingText}
+            </span>
           </h2>
 
           <div role="region" aria-label="Biography">
@@ -147,12 +162,7 @@ export default function About() {
             aria-label="Quick facts"
           >
             {ABOUT.facts.map(({ label, value }, i) => (
-              <FactItem
-                key={label}
-                label={label}
-                value={value}
-                displayedValue={factTexts[i]}
-              />
+              <FactItem key={label} label={label} value={value} displayedValue={factTexts[i]} />
             ))}
           </dl>
         </div>

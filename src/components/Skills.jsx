@@ -59,7 +59,10 @@ function CategoryBlock({ category, prefersReduced, labelText }) {
           position: 'relative',
         }}
       >
-        <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+        <span
+          aria-hidden="true"
+          style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+        >
           {fullLabel}
         </span>
         <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{labelText}</span>
@@ -131,10 +134,15 @@ export default function Skills() {
             position: 'relative',
           }}
         >
-          <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+          <span
+            aria-hidden="true"
+            style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+          >
             {SKILLS.sectionLabel}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
+            {sectionLabelText}
+          </span>
         </p>
 
         <h2
@@ -146,7 +154,9 @@ export default function Skills() {
           <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
             {SKILLS.heading}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
+          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>
+            {headingText}
+          </span>
         </h2>
 
         <motion.div

@@ -193,10 +193,15 @@ export default function Contact() {
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {CONTACT.sectionLabel}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
+            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
+              {sectionLabelText}
+            </span>
           </p>
 
           <h2
@@ -208,7 +213,9 @@ export default function Contact() {
             <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
               {CONTACT.heading}
             </span>
-            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
+            <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>
+              {headingText}
+            </span>
           </h2>
 
           <p
@@ -221,7 +228,10 @@ export default function Contact() {
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {CONTACT.prompt}
             </span>
             <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{promptText}</span>

@@ -94,7 +94,10 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {project.title.toUpperCase()}
             </span>
             <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{titleText}</span>
@@ -111,7 +114,10 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {project.stack}
             </span>
             <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{stackText}</span>
@@ -128,7 +134,10 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
               position: 'relative',
             }}
           >
-            <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+            <span
+              aria-hidden="true"
+              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+            >
               {project.description}
             </span>
             <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{descText}</span>
@@ -181,10 +190,15 @@ export default function Work() {
             position: 'relative',
           }}
         >
-          <span aria-hidden="true" style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}>
+          <span
+            aria-hidden="true"
+            style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+          >
             {WORK.sectionLabel}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{sectionLabelText}</span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
+            {sectionLabelText}
+          </span>
         </p>
 
         <h2
@@ -196,7 +210,9 @@ export default function Work() {
           <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
             {WORK.heading}
           </span>
-          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>{headingText}</span>
+          <span style={{ position: 'absolute', top: 0, left: 'calc(2ch + 0.04em)' }}>
+            {headingText}
+          </span>
         </h2>
 
         <motion.div
