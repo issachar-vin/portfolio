@@ -7,7 +7,7 @@ const FOOTER_HEIGHT = 52
 // Scroll delta (px) required to advance to the next section
 const THRESHOLD = 300
 // How much the page visually drifts before threshold (at section edge)
-const RESISTANCE = 0
+const RESISTANCE = 0.12
 // Ms of wheel inactivity before springing back to section edge
 const IDLE_MS = 140
 // Tolerance for "are we at the edge?" check
@@ -46,6 +46,7 @@ export function useScrollController() {
 
   useEffect(() => {
     if (prefersReduced) return
+    if (window.matchMedia('(pointer: coarse)').matches) return
 
     function springTo(target, isSnapBack = false) {
       animRef.current?.stop()
