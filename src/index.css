@@ -39,6 +39,8 @@
 html {
   scroll-padding-top: 56px;
   scroll-padding-bottom: 52px;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 section {
