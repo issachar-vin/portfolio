@@ -374,6 +374,12 @@ label {
   .section-wrap {
     padding: clamp(3.5rem, 10vw, 9rem) clamp(2.5rem, 8vw, 7rem);
   }
+  /* Vignette uses position:fixed with inset offsets tied to the nav/footer
+     heights. iOS Safari repositions fixed elements when the address bar
+     shows/hides, making the dark edges visibly shift on direction change. */
+  .crt-vignette::before {
+    display: none;
+  }
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────── */
