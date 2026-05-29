@@ -1,16 +1,73 @@
-# React + Vite
+# vinajeras.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal portfolio site with a retro CRT terminal aesthetic.
 
-Currently, two official plugins are available:
+**Live:** https://vinajeras.com
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
 
-## React Compiler
+- React 19 + Vite
+- Framer Motion — spring scroll controller, section animations
+- Tailwind CSS v4
+- `react-icons` for social icons
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Architecture
 
-## Expanding the ESLint configuration
+| Concern                 | Location                           |
+| ----------------------- | ---------------------------------- |
+| All visible copy        | `src/data/copy.js`                 |
+| Framer Motion variants  | `src/animations/variants.js`       |
+| Custom spring scroll    | `src/hooks/useScrollController.js` |
+| Active section tracking | `src/hooks/useActiveSection.js`    |
+| CRT canvas effects      | `src/components/CRTCanvas.jsx`     |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Section order:** hero → about → experience → skills → projects → contact
+
+Section IDs must match exactly — used by `useActiveSection`, `Footer`, and `useScrollController`.
+
+## Scroll behavior
+
+Desktop uses a custom spring scroll controller (`useScrollController`):
+
+- Accumulates wheel delta; advances to the next section once threshold is reached
+- Springs back to the section edge if threshold isn't met
+- Free-scrolls within sections whose content overflows the viewport (e.g. Experience)
+- Keyboard: `ArrowDown/Up`, `PageDown/Up`
+
+Touch/mobile falls back to CSS `scroll-snap-type: y mandatory`.
+
+## CRT effects
+
+| Effect                                          | Implementation                                    |
+| ----------------------------------------------- | ------------------------------------------------- |
+| Phosphor ambient + grain + chromatic aberration | `CRTCanvas` rAF loop                              |
+| Scanlines                                       | `.crt-scanlines::after` fixed pseudo-element      |
+| Vignette (desktop only)                         | `.crt-vignette::before` fixed pseudo-element      |
+| Irregular flicker                               | `@keyframes flicker` on root div (`opacity` only) |
+| Glow pulse                                      | `@keyframes glow-pulse` on `.glow-text`           |
+
+> **CSS constraint:** never use `filter` or `transform` on the root app div or any ancestor of fixed elements — either property creates a new CSS containing block and breaks `position: fixed` on the canvas, nav, footer, scanlines, and vignette.
+
+## Design tokens
+
+```
+--bg:             #07070a
+--phosphor:       #e8a020
+--phosphor-dim:   #7a4a10
+--phosphor-faint: #2a1a06
+--font-display:   VT323 (monospace)
+--font-body:      Share Tech Mono (monospace)
+```
+
+## Commands
+
+```bash
+npm run dev        # local dev server
+npm run build      # production build
+npm run lint       # eslint
+npm run format     # prettier --write
+```
+
+## Deployment
+
+GitHub Actions → GitHub Pages on push to `main`.
