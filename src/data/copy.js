@@ -144,14 +144,6 @@ export const WORK = {
       href: 'https://github.com/issachar-vin/stream-manager',
     },
     {
-      id: 'dragon-traveler',
-      title: 'Dragon Traveler Guide',
-      stack: 'FastAPI · React · TypeScript · MongoDB',
-      description:
-        'Full-stack travel companion — Python scraper seeds the DB, FastAPI serves the data, React renders it.',
-      href: 'https://github.com/issachar-vin/DragonTravelerAPI',
-    },
-    {
       id: 'chess-learner',
       title: 'Chess Learner',
       stack: 'FastAPI · React · MongoDB · Chess Engine',
@@ -166,6 +158,15 @@ export const WORK = {
       description:
         'AI-powered resume tailor — parses LaTeX source, rewrites it for a specific job posting via Claude, exports back to PDF.',
       href: 'https://github.com/issachar-vin/Resume-Builder',
+    },
+    {
+      id: 'ghost-identification',
+      title: 'Ghost Identification',
+      stack: 'React · TypeScript',
+      description:
+        'Phasmophobia evidence tracker — select clues to narrow the ghost type, track hunts, and manage objectives in real time.',
+      href: 'https://github.com/issachar-vin/ghost-identification-system',
+      liveHref: 'https://gis.eroizzy.com',
     },
   ],
 }
