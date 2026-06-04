@@ -5,10 +5,16 @@ import { useTypingSequence } from '../hooks/useTypingSequence'
 import { WORK } from '../data/copy'
 
 /* ── Single project card ─────────────────────────────────────── */
-function ProjectCard({ project, index, prefersReduced, titleText, stackText, descText }) {
+function ProjectCard({ project, index, prefersReduced, isActive }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [hovered, setHovered] = useState(false)
   const cardRef = useRef(null)
+
+  const [titleText, stackText, descText] = useTypingSequence(isActive, [
+    { text: project.title.toUpperCase(), speed: 20 },
+    { text: project.stack, speed: 12 },
+    { text: project.description, speed: 3 },
+  ])
 
   const onMove = (e) => {
     if (prefersReduced || !cardRef.current) return
@@ -156,21 +162,12 @@ export default function Work() {
 
   const cardV = prefersReduced ? instant : cardContainer
 
-  const [sectionLabelText, headingText, ...projectRest] = useTypingSequence(isInView, [
+  const [sectionLabelText, headingText] = useTypingSequence(isInView, [
     { text: WORK.sectionLabel, speed: 20 },
     { text: WORK.heading, speed: 35 },
-    ...WORK.projects.flatMap((p) => [
-      { text: p.title.toUpperCase(), speed: 20 },
-      { text: p.stack, speed: 12 },
-      { text: p.description, speed: 3 },
-    ]),
   ])
 
-  const projectTexts = WORK.projects.map((_, i) => ({
-    titleText: projectRest[i * 3],
-    stackText: projectRest[i * 3 + 1],
-    descText: projectRest[i * 3 + 2],
-  }))
+  const isCardsActive = isInView && headingText === WORK.heading
 
   return (
     <section
@@ -232,7 +229,7 @@ export default function Work() {
               project={project}
               index={i}
               prefersReduced={prefersReduced}
-              {...projectTexts[i]}
+              isActive={isCardsActive}
             />
           ))}
         </motion.div>
