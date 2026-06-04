@@ -34,7 +34,7 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
           height: '100%',
           border: `1px solid ${hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)'}`,
           background: 'var(--surface)',
-          padding: '1.75rem 2rem 2rem',
+          padding: '1rem 1.5rem 1.5rem',
           display: 'flex',
           flexDirection: 'column',
           transform: prefersReduced
@@ -47,7 +47,7 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
         }}
       >
         {/* Index */}
-        <div style={{ marginBottom: '1.75rem' }}>
+        <div style={{ marginBottom: '1rem' }}>
           <span
             style={{
               fontFamily: 'var(--font-body)',
@@ -86,7 +86,7 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
             color: 'var(--phosphor-dim)',
             fontSize: '0.68rem',
             letterSpacing: '0.12em',
-            marginBottom: '1.25rem',
+            marginBottom: '0.75rem',
             position: 'relative',
           }}
         >
@@ -123,7 +123,7 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
         <div
           style={{
             marginTop: 'auto',
-            paddingTop: '1.5rem',
+            paddingTop: '1rem',
             display: 'flex',
             gap: '0.75rem',
             flexWrap: 'wrap',
@@ -177,7 +177,7 @@ export default function Work() {
       id="projects"
       aria-labelledby="work-heading"
       ref={ref}
-      style={{ padding: 'clamp(5rem, 12vw, 9rem) clamp(1.5rem, 6vw, 7rem)' }}
+      style={{ padding: 'clamp(3rem, 5vw, 5rem) clamp(1.5rem, 6vw, 7rem)' }}
     >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <p
@@ -186,7 +186,7 @@ export default function Work() {
             color: 'var(--phosphor-dim)',
             fontSize: '0.75rem',
             letterSpacing: '0.2em',
-            marginBottom: '0.75rem',
+            marginBottom: '0.5rem',
             position: 'relative',
           }}
         >
@@ -205,7 +205,7 @@ export default function Work() {
           id="work-heading"
           className="glow-text prompt"
           aria-label={WORK.heading}
-          style={{ marginBottom: '3.5rem', position: 'relative' }}
+          style={{ marginBottom: '2rem', position: 'relative' }}
         >
           <span aria-hidden="true" style={{ visibility: 'hidden', pointerEvents: 'none' }}>
             {WORK.heading}
