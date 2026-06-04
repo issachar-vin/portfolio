@@ -25,125 +25,125 @@ function ProjectCard({ project, index, prefersReduced, titleText, stackText, des
 
   return (
     <motion.article variants={cardItem} style={{ height: '100%' }}>
-      <a
-        href={project.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`View ${project.title} on GitHub`}
-        style={{ textDecoration: 'none', display: 'block', height: '100%' }}
+      <div
+        ref={cardRef}
+        onMouseMove={onMove}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={onLeave}
+        style={{
+          height: '100%',
+          border: `1px solid ${hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)'}`,
+          background: 'var(--surface)',
+          padding: '1.75rem 2rem 2rem',
+          display: 'flex',
+          flexDirection: 'column',
+          transform: prefersReduced
+            ? 'none'
+            : `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+          boxShadow: hovered ? '0 0 40px var(--glow-strong), 0 0 8px var(--glow)' : 'none',
+          transition: hovered
+            ? 'border-color 0.15s, box-shadow 0.2s, transform 0.08s'
+            : 'border-color 0.3s, box-shadow 0.4s, transform 0.5s ease',
+        }}
       >
-        <div
-          ref={cardRef}
-          onMouseMove={onMove}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={onLeave}
+        {/* Index */}
+        <div style={{ marginBottom: '1.75rem' }}>
+          <span
+            style={{
+              fontFamily: 'var(--font-body)',
+              color: 'var(--phosphor-faint)',
+              fontSize: '0.68rem',
+              letterSpacing: '0.15em',
+            }}
+          >
+            {String(index + 1).padStart(2, '0')}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3
+          className={hovered ? 'glow-text' : ''}
           style={{
-            height: '100%',
-            border: `1px solid ${hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)'}`,
-            background: 'var(--surface)',
-            padding: '1.75rem 2rem 2rem',
-            display: 'flex',
-            flexDirection: 'column',
-            transform: prefersReduced
-              ? 'none'
-              : `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-            boxShadow: hovered ? '0 0 40px var(--glow-strong), 0 0 8px var(--glow)' : 'none',
-            transition: hovered
-              ? 'border-color 0.15s, box-shadow 0.2s, transform 0.08s'
-              : 'border-color 0.3s, box-shadow 0.4s, transform 0.5s ease',
+            fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)',
+            marginBottom: '0.5rem',
+            transition: 'text-shadow 0.2s',
+            position: 'relative',
           }}
         >
-          {/* Number + arrow */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              marginBottom: '1.75rem',
-            }}
+          <span
+            aria-hidden="true"
+            style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
           >
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                color: 'var(--phosphor-faint)',
-                fontSize: '0.68rem',
-                letterSpacing: '0.15em',
-              }}
-            >
-              {String(index + 1).padStart(2, '0')}
-            </span>
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                color: hovered ? 'var(--phosphor)' : 'var(--phosphor-dim)',
-                fontSize: '1.1rem',
-                transition: 'color 0.2s',
-              }}
-            >
-              ↗
-            </span>
-          </div>
+            {project.title.toUpperCase()}
+          </span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{titleText}</span>
+        </h3>
 
-          {/* Title */}
-          <h3
-            className={hovered ? 'glow-text' : ''}
-            style={{
-              fontSize: 'clamp(1.2rem, 2.5vw, 1.6rem)',
-              marginBottom: '0.5rem',
-              transition: 'text-shadow 0.2s',
-              position: 'relative',
-            }}
+        {/* Stack */}
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            color: 'var(--phosphor-dim)',
+            fontSize: '0.68rem',
+            letterSpacing: '0.12em',
+            marginBottom: '1.25rem',
+            position: 'relative',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
           >
-            <span
-              aria-hidden="true"
-              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
-            >
-              {project.title.toUpperCase()}
-            </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{titleText}</span>
-          </h3>
+            {project.stack}
+          </span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{stackText}</span>
+        </p>
 
-          {/* Stack */}
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              color: 'var(--phosphor-dim)',
-              fontSize: '0.68rem',
-              letterSpacing: '0.12em',
-              marginBottom: '1.25rem',
-              position: 'relative',
-            }}
+        {/* Description */}
+        <p
+          style={{
+            fontFamily: 'var(--font-body)',
+            color: 'var(--phosphor-dim)',
+            fontSize: 'clamp(0.82rem, 1.4vw, 0.9rem)',
+            lineHeight: 1.75,
+            flexGrow: 1,
+            position: 'relative',
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
           >
-            <span
-              aria-hidden="true"
-              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
-            >
-              {project.stack}
-            </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{stackText}</span>
-          </p>
+            {project.description}
+          </span>
+          <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{descText}</span>
+        </p>
 
-          {/* Description */}
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              color: 'var(--phosphor-dim)',
-              fontSize: 'clamp(0.82rem, 1.4vw, 0.9rem)',
-              lineHeight: 1.75,
-              flexGrow: 1,
-              position: 'relative',
-            }}
-          >
-            <span
-              aria-hidden="true"
-              style={{ visibility: 'hidden', display: 'block', pointerEvents: 'none' }}
+        {/* Link bar */}
+        <div
+          style={{
+            marginTop: 'auto',
+            paddingTop: '1.5rem',
+            display: 'flex',
+            gap: '0.75rem',
+            flexWrap: 'wrap',
+          }}
+        >
+          <a href={project.href} target="_blank" rel="noopener noreferrer" className="project-link">
+            [ GITHUB ↗ ]
+          </a>
+          {project.liveHref && (
+            <a
+              href={project.liveHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-link"
             >
-              {project.description}
-            </span>
-            <span style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>{descText}</span>
-          </p>
+              [ LIVE ↗ ]
+            </a>
+          )}
         </div>
-      </a>
+      </div>
     </motion.article>
   )
 }

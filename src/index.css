@@ -361,6 +361,27 @@ label {
   --edge-dir: top;
 }
 
+/* ─── Project link buttons ───────────────────────────────────── */
+.project-link {
+  font-family: var(--font-body);
+  color: var(--phosphor-dim);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  border: 1px solid var(--phosphor-dim);
+  padding: 0.25em 0.6em;
+  text-decoration: none;
+  transition:
+    color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.project-link:hover {
+  color: var(--phosphor);
+  border-color: var(--phosphor);
+  box-shadow: 0 0 8px var(--glow);
+}
+
 /* ─── Touch / mobile: CSS snap replaces spring controller ───── */
 @media (pointer: coarse) {
   html {
