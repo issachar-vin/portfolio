@@ -241,7 +241,15 @@ export default function Contact() {
           )}
 
           <motion.div variants={lineItem}>
+<<<<<<< HEAD
             <button type="submit" className="terminal-btn prompt" disabled={sending}>
+=======
+            <button
+              type="submit"
+              className="terminal-btn prompt"
+              disabled={sending}
+            >
+>>>>>>> 5daca4c (feat: wire contact form to mailfolio with hCaptcha)
               {sending ? CONTACT.submittingLabel : CONTACT.submitLabel}
             </button>
           </motion.div>
