@@ -88,7 +88,7 @@ export default function Contact() {
       ref={ref}
       style={{ padding: 'clamp(5rem, 12vw, 9rem) clamp(1.5rem, 6vw, 7rem)' }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ width: '100%', maxWidth: '700px', margin: '0 auto' }}>
         <p
           style={{
             fontFamily: 'var(--font-body)',
@@ -149,7 +149,7 @@ export default function Contact() {
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           noValidate
-          style={{ maxWidth: '560px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+          style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
         >
           {CONTACT.fields.map((field) => (
             <motion.div key={field.name} variants={lineItem}>
