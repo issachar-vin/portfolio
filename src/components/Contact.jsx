@@ -67,7 +67,7 @@ export default function Contact() {
               ? CONTACT.errors.e422
               : res.status === 429
                 ? CONTACT.errors.e429
-                : CONTACT.errors.network,
+                : CONTACT.errors.network
         )
       }
     } catch {
@@ -241,11 +241,7 @@ export default function Contact() {
           )}
 
           <motion.div variants={lineItem}>
-            <button
-              type="submit"
-              className="terminal-btn prompt"
-              disabled={sending}
-            >
+            <button type="submit" className="terminal-btn prompt" disabled={sending}>
               {sending ? CONTACT.submittingLabel : CONTACT.submitLabel}
             </button>
           </motion.div>
