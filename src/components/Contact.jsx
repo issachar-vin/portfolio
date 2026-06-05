@@ -5,8 +5,8 @@ import { lineContainer, lineItem, instant } from '../animations/variants'
 import { useTypingSequence } from '../hooks/useTypingSequence'
 import { CONTACT } from '../data/copy'
 
-const MAILFOLIO_URL = window.ENV?.MAILFOLIO_URL || import.meta.env.VITE_MAILFOLIO_URL
-const HCAPTCHA_SITE_KEY = window.ENV?.HCAPTCHA_SITE_KEY || import.meta.env.VITE_HCAPTCHA_SITE_KEY
+const MAILFOLIO_URL = window.ENV?.MAILFOLIO_URL || import.meta.env.MAILFOLIO_URL
+const HCAPTCHA_SITE_KEY = window.ENV?.HCAPTCHA_SITE_KEY || import.meta.env.HCAPTCHA_SITE_KEY
 
 const INITIAL_FIELDS = { name: '', email: '', subject: '', message: '' }
 

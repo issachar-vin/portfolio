@@ -1,4 +1,4 @@
-.PHONY: setup dev lint format build clean
+.PHONY: setup dev lint format build restart clean
 
 setup:
 	npm install
@@ -15,6 +15,11 @@ format:
 
 build:
 	npm run build
+
+restart:
+	docker compose down
+	docker compose build
+	docker compose up
 
 clean:
 	docker compose down
