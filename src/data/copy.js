@@ -228,21 +228,38 @@ export const CONTACT = {
   heading: 'CONTACT',
   prompt: '> ESTABLISH_CONNECTION',
   fields: [
-    { name: 'name', label: '// YOUR_NAME', type: 'text', placeholder: 'John Doe' },
+    { name: 'name', label: '// YOUR_NAME', type: 'text', placeholder: 'John Doe', required: true },
+    {
+      name: 'email',
+      label: '// YOUR_EMAIL',
+      type: 'email',
+      placeholder: 'you@example.com',
+      required: true,
+    },
+    {
+      name: 'subject',
+      label: '// SUBJECT (OPTIONAL)',
+      type: 'text',
+      placeholder: 'Project inquiry',
+      required: false,
+    },
     {
       name: 'message',
       label: '// MESSAGE',
       type: 'textarea',
       placeholder: 'What are you building?',
+      required: true,
     },
   ],
   submitLabel: 'TRANSMIT_',
+  submittingLabel: 'TRANSMITTING_',
   successMessage: '> MESSAGE_RECEIVED. TALK SOON.',
-  wip: {
-    heading: '> FEATURE_PENDING',
-    body: 'The contact form is currently under development.',
-    emailLabel: 'EMAIL',
-    linkedinLabel: 'LINKEDIN',
+  errors: {
+    captcha: '> CAPTCHA_REQUIRED. Complete the verification below.',
+    e403: '> ACCESS_DENIED. Origin not permitted.',
+    e422: '> INVALID_INPUT. Check your details and try again.',
+    e429: '> RATE_LIMITED. Please wait a minute before retrying.',
+    network: '> TRANSMISSION_FAILED. Check your connection.',
   },
 }
 
