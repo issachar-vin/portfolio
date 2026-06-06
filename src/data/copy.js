@@ -160,6 +160,14 @@ export const WORK = {
       href: 'https://github.com/issachar-vin/Resume-Builder',
     },
     {
+      id: 'mailfolio',
+      title: 'Mailfolio',
+      stack: 'FastAPI · Docker · Gmail SMTP · hCaptcha',
+      description:
+        'Lightweight contact form backend — validates origin, verifies hCaptcha, and delivers submissions to your inbox via Gmail SMTP. Deployed as a container.',
+      href: 'https://github.com/issachar-vin/mailfolio',
+    },
+    {
       id: 'ghost-identification',
       title: 'Ghost Identification',
       stack: 'React · TypeScript',
