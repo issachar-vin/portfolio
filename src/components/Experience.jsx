@@ -35,7 +35,16 @@ function BulletLine({ text, displayedText }) {
   )
 }
 
-function RoleEntry({ role, companyText, periodText, titleText, bulletTexts }) {
+function RoleEntry({ role, isActive }) {
+  const items = [
+    { text: role.company.toUpperCase(), speed: 4 },
+    { text: role.period, speed: 3 },
+    { text: role.title.toUpperCase(), speed: 3 },
+    ...role.bullets.map((b) => ({ text: b, speed: 1 })),
+  ]
+
+  const [companyText, periodText, titleText, ...bulletTexts] = useTypingSequence(isActive, items)
+
   return (
     <div style={{ paddingBottom: '2.5rem', borderBottom: '1px solid var(--border)' }}>
       <div
@@ -123,29 +132,12 @@ export default function Experience() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: false, margin: '-15%' })
 
-  // Build flat item list in DOM display order
-  const items = [
+  const [sectionLabelText, headingText] = useTypingSequence(isInView, [
     { text: EXPERIENCE.sectionLabel, speed: 4 },
     { text: EXPERIENCE.heading, speed: 8 },
-  ]
-  EXPERIENCE.roles.forEach((role) => {
-    items.push({ text: role.company.toUpperCase(), speed: 4 })
-    items.push({ text: role.period, speed: 3 })
-    items.push({ text: role.title.toUpperCase(), speed: 3 })
-    role.bullets.forEach((b) => items.push({ text: b, speed: 1 }))
-  })
+  ])
 
-  const [sectionLabelText, headingText, ...rest] = useTypingSequence(isInView, items)
-
-  // Map flat results back to per-role shape
-  let offset = 0
-  const roleTexts = EXPERIENCE.roles.map((role) => {
-    const companyText = rest[offset++]
-    const periodText = rest[offset++]
-    const titleText = rest[offset++]
-    const bulletTexts = role.bullets.map(() => rest[offset++])
-    return { companyText, periodText, titleText, bulletTexts }
-  })
+  const rolesActive = isInView && headingText === EXPERIENCE.heading
 
   return (
     <section
@@ -191,8 +183,8 @@ export default function Experience() {
         </h2>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-          {EXPERIENCE.roles.map((role, i) => (
-            <RoleEntry key={role.id} role={role} {...roleTexts[i]} />
+          {EXPERIENCE.roles.map((role) => (
+            <RoleEntry key={role.id} role={role} isActive={rolesActive} />
           ))}
         </div>
       </div>
